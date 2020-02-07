@@ -17,6 +17,10 @@ public class CoreSql {
         this.port = port;
     }
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     public void connect() {
         try {
             connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);

@@ -1,6 +1,7 @@
 package de.razey.mc.core;
 
 import de.razey.mc.core.api.CoreApi;
+import de.razey.mc.core.events.CorePlayerDisconnectEvent;
 import de.razey.mc.core.events.CorePlayerEnterEvents;
 import de.razey.mc.core.sql.CoreSql;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,6 +21,7 @@ public class Main extends JavaPlugin {
         api = new CoreApi(this);
 
         this.getServer().getPluginManager().registerEvents(new CorePlayerEnterEvents(), this);
+        this.getServer().getPluginManager().registerEvents(new CorePlayerDisconnectEvent(), this);
 
         System.out.println("Server Core enabled.");
     }
