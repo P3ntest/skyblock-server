@@ -18,7 +18,12 @@ public class CoreApi {
         _instance = this;
         FileConfiguration config = main.getConfig();
         if (sql == null) {
-            sql = new CoreSql(config.getString("database.host"), config.getString("database.username"), "", "", 0);
+            sql = new CoreSql(
+                    config.getString("database.host"),
+                    config.getString("database.username"),
+                    config.getString("database.password"),
+                    config.getString("database.database"),
+                    config.getInt("database.port"));
             sql.connect();
         }
     }

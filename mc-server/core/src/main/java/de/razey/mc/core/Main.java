@@ -16,11 +16,12 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         _instance = this;
         saveDefaultConfig();
-        System.out.println("Server Core enabled.");
 
         api = new CoreApi(this);
 
         this.getServer().getPluginManager().registerEvents(new CorePlayerEnterEvents(), this);
+
+        System.out.println("Server Core enabled.");
     }
 
     public void onDisable() {
