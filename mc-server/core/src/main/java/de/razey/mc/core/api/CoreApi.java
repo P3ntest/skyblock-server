@@ -2,6 +2,7 @@ package de.razey.mc.core.api;
 
 import de.razey.mc.core.Main;
 import de.razey.mc.core.sql.CoreSql;
+import org.bukkit.configuration.file.FileConfiguration;
 
 public class CoreApi {
 
@@ -9,10 +10,15 @@ public class CoreApi {
 
     private CoreSql sql;
 
+    private Main main;
+
     public CoreApi(Main main) {
+        this.main = main;
+
         _instance = this;
+        FileConfiguration config = main.getConfig();
         if (sql == null) {
-            sql = new CoreSql("", "", "", "", 0);
+            sql = new CoreSql(config.getString("database.host"), config.getString("database.username"), "", "", 0);
             sql.connect();
         }
     }
