@@ -101,6 +101,7 @@ public class CoreApi {
             PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT id FROM users WHERE uuid=?");
             userIdStatement.setString(1, uuid);
             ResultSet userIdResult = userIdStatement.executeQuery();
+            userIdResult.next();
             return userIdResult.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
