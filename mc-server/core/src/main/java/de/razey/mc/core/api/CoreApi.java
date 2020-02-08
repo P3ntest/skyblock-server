@@ -70,10 +70,11 @@ public class CoreApi {
 
     public void playerFirstJoin(Player player) {
         try {
-            PreparedStatement ps = sql.getConnection().prepareStatement("INSERT INTO users ('uuid', 'username', 'first_online') VALUES (?, ?, ?)");
+            PreparedStatement ps = sql.getConnection().prepareStatement("INSERT INTO `users`(`uuid`, `username`, `first_online`, `last_online`) VALUES (?, ?, ?, ?)");
             ps.setString(1, player.getUniqueId().toString());
             ps.setString(2, player.getName());
             ps.setLong(3, System.currentTimeMillis());
+            ps.setLong(4, System.currentTimeMillis());
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -101,38 +102,39 @@ public class CoreApi {
         int playerId;
 
         try {
-            PreparedStatement ps = sql.getConnection().prepareStatement("SELECT id FROM users WHERE uuid=?");
-            ps.setString(1, uuid);
-            ResultSet result = ps.executeQuery();
-            if (!result.next()) {
+            PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT id FROM users WHERE uuid=?");
+            userIdStatement.setString(1, uuid);
+            ResultSet userIdResult = userIdStatement.executeQuery();
+            if (!userIdResult.next()) {
                 return null;
             }
-            playerId = result.getInt(1);
+            playerId = userIdResult.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
         }
 
         try {
-            PreparedStatement ps = sql.getConnection().prepareStatement("SELECT permission FROM player_permissions WHERE player=?");
-            ps.setInt(1, playerId);
-            ResultSet result = ps.executeQuery();
-            while (result.next()) {
-                if (!permissions.contains(result.getString(1))) {
-                    permissions.add(result.getString(1));
+            PreparedStatement playerPermissionsStatement = sql.getConnection().prepareStatement("SELECT permission FROM player_permissions WHERE player=?");
+            playerPermissionsStatement.setInt(1, playerId);
+            ResultSet playerPermissionsResult = playerPermissionsStatement.executeQuery();
+            while (playerPermissionsResult.next()) {
+                if (!permissions.contains(playerPermissionsResult.getString(1))) {
+                    permissions.add(playerPermissionsResult.getString(1));
                 }
             }
 
-            ps = sql.getConnection().prepareStatement("SELECT rank FROM player_ranks WHERE player=?");
-            ps.setInt(1, playerId);
-            result = ps.executeQuery();
-            while (result.next()) {
-                PreparedStatement permps = sql.getConnection().prepareStatement("SELECT permission FROM rank_permissions WHERE rank=?");
-                permps.setInt(1, result.getInt(1));
-                ResultSet permResult = ps.executeQuery();
-                while (permResult.next()) {
-                    if (!permissions.contains(permResult.getString(1))) {
-                        permissions.add(permResult.getString(1));
+            PreparedStatement userRanksIdStatement = sql.getConnection().prepareStatement("SELECT rank FROM player_ranks WHERE player=?");
+            userRanksIdStatement.setInt(1, playerId);
+            ResultSet userRanksIdResult = userRanksIdStatement.executeQuery();
+
+            while (userRanksIdResult.next()) {
+                PreparedStatement rankPermissionsStatement = sql.getConnection().prepareStatement("SELECT permission FROM rank_permissions WHERE rank=?");
+                rankPermissionsStatement.setInt(1, userRanksIdResult.getInt(1));
+                ResultSet rankPermissionsResult = rankPermissionsStatement.executeQuery();
+                while (rankPermissionsResult.next()) {
+                    if (!permissions.contains(rankPermissionsResult.getString(1))) {
+                        permissions.add(rankPermissionsResult.getString(1));
                     }
                 }
             }

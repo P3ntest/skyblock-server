@@ -10,6 +10,7 @@ public class CorePlayerDisconnectEvent implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent e) {
         CoreApi.getInstance().updateLastOnlineTime(e.getPlayer().getUniqueId().toString());
+        e.setQuitMessage(null);
     }
 
 }
