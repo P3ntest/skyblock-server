@@ -1,9 +1,0 @@
-name: ServerCore
-author: P3ntest
-authors:
-  - P3ntest
-  - razey
-  - razey-network
-main: de.razey.mc.core.Main
-version: 1.0
-commands:
