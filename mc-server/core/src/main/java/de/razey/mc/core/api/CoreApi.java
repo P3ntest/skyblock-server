@@ -127,12 +127,21 @@ public class CoreApi {
             ps.setInt(1, playerId);
             result = ps.executeQuery();
             while (result.next()) {
-                //TODO Alle Permissions von allen Rängen hinzufügen.
+                PreparedStatement permps = sql.getConnection().prepareStatement("SELECT permission FROM rank_permissions WHERE rank=?");
+                permps.setInt(1, result.getInt(1));
+                ResultSet permResult = ps.executeQuery();
+                while (permResult.next()) {
+                    if (!permissions.contains(permResult.getString(1))) {
+                        permissions.add(permResult.getString(1));
+                    }
+                }
             }
 
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        return permissions;
     }
 }
