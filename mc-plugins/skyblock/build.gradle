@@ -10,9 +10,14 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     mavenLocal()
+
+    maven { url "https://papermc.io/repo/repository/maven-public/" }
+    maven { url 'http://ci.athion.net/job/FastAsyncWorldEdit/ws/mvn/' }
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compileOnly 'de.razey:coreapi:1.0'
+    compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
+    compileOnly 'com.boydti:fawe-api:latest'
 }
