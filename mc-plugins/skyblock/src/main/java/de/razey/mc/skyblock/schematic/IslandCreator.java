@@ -1,5 +1,6 @@
 package de.razey.mc.skyblock.schematic;
 
+import com.avaje.ebean.validation.NotNull;
 import com.boydti.fawe.util.EditSessionBuilder;
 import com.google.gson.internal.$Gson$Preconditions;
 import com.sk89q.worldedit.EditSession;
@@ -47,6 +48,35 @@ public abstract class IslandCreator {
         return 99;
     }
 
+    public static int getIslandOfLocation(Location loc) {
+        if (loc.getZ() > 250 || loc.getZ() < -250) {
+            return -1;
+        }
+        double boundX = loc.getX() % islandPadding;
+        if (boundX  > 250 || boundX < -250) {
+            return -1;
+        }
+
+        return (int) Math.round(boundX / islandPadding);
+    }
+
+    public static boolean isOnOwnIsland(Player p) {
+        try {
+            int ppos = getIslandPosition(p.getUniqueId().toString());
+            if (ppos == -1) {
+                return false;
+            }
+            if (ppos == getIslandOfLocation(p.getLocation())) {
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     private static void spawnIsland(Location location) {
         File file = new File(Main._instance.getDataFolder() + "/island.schematic");
 
@@ -67,7 +97,9 @@ public abstract class IslandCreator {
         );
         getIslandPositionStatement.setInt(1, CoreApi.getInstance().getPlayerId(uuid));
         ResultSet getIslandPositionResult = getIslandPositionStatement.executeQuery();
-        getIslandPositionResult.next();
+        if (!getIslandPositionResult.next()) {
+            return -1;
+        }
         return getIslandPositionResult.getInt(1);
     }
 

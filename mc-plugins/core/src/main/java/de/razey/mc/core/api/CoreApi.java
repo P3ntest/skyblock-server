@@ -5,6 +5,7 @@ import de.razey.mc.core.sql.CoreSql;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nullable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -158,5 +159,77 @@ public class CoreApi {
         }
 
         return permissions;
+    }
+
+    private String getPluginPrefix(String plugin) throws SQLException {
+        PreparedStatement pluginPrefixStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                "SELECT prefix FROM plugin_prefix WHERE plugin=?"
+        );
+        pluginPrefixStatement.setString(1, plugin);
+
+        ResultSet pluginPrefixQuery = pluginPrefixStatement.executeQuery();
+
+        if (pluginPrefixQuery.next()) {
+            return pluginPrefixQuery.getString(1);
+        } else {
+            return "";
+        }
+    }
+
+    public void displayMessage(Player p, String message, @Nullable String plugin, String... args) {
+        try {
+            String prefix = "";
+
+            if (plugin != null) {
+                prefix = getPluginPrefix(plugin);
+            }
+
+            String preferredLanguage = "de";
+
+            PreparedStatement userLanguageStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                    "SELECT language FROM users WHERE uuid=?"
+            );
+            userLanguageStatement.setString(1, p.getUniqueId().toString());
+
+            ResultSet userLanguageQuery = userLanguageStatement.executeQuery();
+
+            if (userLanguageQuery.next()) {
+                preferredLanguage = userLanguageQuery.getString(1);
+            }
+
+            String printMessage = message;
+
+            PreparedStatement messageStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                    "SELECT message FROM messages WHERE id=? AND language=?"
+            );
+            messageStatement.setString(1, message);
+            messageStatement.setString(2, "de");
+            ResultSet messageResult = messageStatement.executeQuery();
+
+            if (messageResult.next()) {
+                printMessage = messageResult.getString(1);
+            }
+
+            PreparedStatement preferredMessageStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                    "SELECT message FROM messages WHERE id=? AND language=?"
+            );
+            preferredMessageStatement.setString(1, message);
+            preferredMessageStatement.setString(2, preferredLanguage);
+            ResultSet preferredMessageResult = preferredMessageStatement.executeQuery();
+
+            if (preferredMessageResult.next()) {
+                printMessage = preferredMessageResult.getString(1);
+            }
+
+            for (int i = 0; i < args.length; i++) {
+                printMessage.replaceAll("%" + (i + 1) + "%", args[i]);
+            }
+
+            p.sendMessage(prefix + printMessage);
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

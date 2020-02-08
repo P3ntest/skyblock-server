@@ -59,15 +59,25 @@ public class SkyblockIslandCommand implements CommandExecutor {
         }
 
         if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("remove")) {
+            if (args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("delete")) {
                 if (args.length == 1) {
-                    sender.sendMessage("Sicher? (/is remove confirm)");
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.confirm", "skyblock");
                     return true;
                 }
-                if (args[1].equalsIgnoreCase("confirm")) {
+                if (args[1].equalsIgnoreCase(   "confirm")) {
                     IslandCreator.eraseIsland(player);
-                    sender.sendMessage("Insel gelöscht");
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.done", "skyblock");
                     return true;
+                }
+            }
+
+            if (args[0].equalsIgnoreCase("sethome")) {
+                if (!player.getWorld().equals(Bukkit.getWorld("islands"))) {
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.sethome.wrong-world", "skyblock");
+                    return true;
+                }
+                if (!IslandCreator.isOnOwnIsland(player)) {
+
                 }
             }
 
