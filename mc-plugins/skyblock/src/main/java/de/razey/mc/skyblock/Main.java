@@ -26,6 +26,7 @@ public class Main extends JavaPlugin {
         System.out.println("Enabled Skyblock");
 
         this.getCommand("island").setExecutor(new SkyblockIslandCommand());
+        this.getCommand("island").setExecutor(new SkyblockIslandCommand());
 
         this.getServer().getPluginManager().registerEvents(new SkyblockPlayerInteractEvent(), this);
     }

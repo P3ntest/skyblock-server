@@ -10,3 +10,5 @@ main: de.razey.mc.skyblock.Main
 commands:
   island:
     aliases: [is, skyblock, skyisland, si]
+  balance:
+    aliases: [bal, money, geld]
