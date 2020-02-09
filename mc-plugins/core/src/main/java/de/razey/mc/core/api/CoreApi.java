@@ -102,7 +102,24 @@ public class CoreApi {
             PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT id FROM users WHERE uuid=?");
             userIdStatement.setString(1, uuid);
             ResultSet userIdResult = userIdStatement.executeQuery();
-            userIdResult.next();
+            if (!userIdResult.next()) {
+                return -1;
+            }
+            return userIdResult.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getPlayerIdFromName(String name) {
+        try {
+            PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT id FROM users WHERE LOWER(username)=LOWER(?)");
+            userIdStatement.setString(1, name);
+            ResultSet userIdResult = userIdStatement.executeQuery();
+            if (!userIdResult.next()) {
+                return -1;
+            }
             return userIdResult.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
