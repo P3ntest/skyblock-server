@@ -178,7 +178,7 @@ public class CoreApi {
         }
     }
 
-    public float getSkyblockBalanceOfPlayerId(int playerId) {
+    public float getSkyblockBalanceFromPlayerId(int playerId) {
         enterPlayerToSkyblockStats(playerId);
         try {
             ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT balance FROM skyblock_stats WHERE id=" + playerId);
@@ -192,7 +192,7 @@ public class CoreApi {
         return 0;
     }
 
-    public void modifySkyblockBalanceOfPlayerId(int playerId, float addition) {
+    public void modifySkyblockBalanceFromPlayerId(int playerId, float addition) {
         enterPlayerToSkyblockStats(playerId);
         try {
             CoreApi.getInstance().getSql().updateStatement("UPDATE UPDATE `skyblock_stats` SET `balance`=`balance`+" + addition + " WHERE player="+ playerId);
@@ -201,7 +201,7 @@ public class CoreApi {
         }
     }
 
-    public void setSkyblockBalanceOfPlayerId(int playerId, float value) {
+    public void setSkyblockBalanceFromPlayerId(int playerId, float value) {
         enterPlayerToSkyblockStats(playerId);
         try {
             CoreApi.getInstance().getSql().updateStatement("UPDATE UPDATE `skyblock_stats` SET `balance`=" + value + " WHERE player="+ playerId);
@@ -211,7 +211,7 @@ public class CoreApi {
     }
 
     public String getCorrectPlayerName(String wrongName) {
-        return getPlayerIdFromName(wrongName);
+        return getpl getPlayerIdFromName(wrongName);
     }
 
     public int getPowerOfRank(int rankId) {
