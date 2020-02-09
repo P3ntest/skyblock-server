@@ -39,27 +39,12 @@ public class SkyblockIslandCommand implements CommandExecutor {
         }
 
         if (args.length == 0) {
-            try {
-                PreparedStatement getIslandSpawnStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
-                        "SELECT `home_x`, `home_y`, `home_z` FROM islands WHERE owner=?"
-                );
-                getIslandSpawnStatement.setInt(1, CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()));
-                ResultSet getIslandSpawnResult = getIslandSpawnStatement.executeQuery();
-                getIslandSpawnResult.next();
-                player.teleport(new Location(
-                        Bukkit.getWorld("islands"),
-                        getIslandSpawnResult.getFloat(1),
-                        getIslandSpawnResult.getFloat(2),
-                        getIslandSpawnResult.getFloat(3)));
-                return true;
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            //player.teleport(IslandCreator.getIslandSpawn())
             return true;
         }
 
         if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("delete")) {
+            if (args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("rm")) {
                 if (args.length == 1) {
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.confirm", "skyblock");
                     return true;
@@ -77,8 +62,13 @@ public class SkyblockIslandCommand implements CommandExecutor {
                     return true;
                 }
                 if (!IslandCreator.isOnOwnIsland(player)) {
-
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.sethome.wrong-island", "skyblock");
+                    return true;
                 }
+
+                IslandCreator.setIslandSpawn(IslandCreator.getIslandOfLocation(player.getLocation()), player.getLocation());
+                CoreApi.getInstance().displayMessage(player, "skyblock.island.sethome.done", "skyblock");
+                return true;
             }
 
             return true;

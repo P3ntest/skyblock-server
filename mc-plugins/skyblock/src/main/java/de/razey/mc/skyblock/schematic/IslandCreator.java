@@ -48,6 +48,25 @@ public abstract class IslandCreator {
         return 99;
     }
 
+    public static Location getIslandSpawn(int position) {
+        try {
+            PreparedStatement getIslandSpawnStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                    "SELECT `home_x`, `home_y`, `home_z` FROM islands WHERE position=?"
+            );
+            getIslandSpawnStatement.setInt(1, position);
+            ResultSet getIslandSpawnResult = getIslandSpawnStatement.executeQuery();
+            getIslandSpawnResult.next();
+            return new Location(
+                    Bukkit.getWorld("islands"),
+                    getIslandSpawnResult.getFloat(1),
+                    getIslandSpawnResult.getFloat(2),
+                    getIslandSpawnResult.getFloat(3));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static int getIslandOfLocation(Location loc) {
         if (loc.getZ() > 250 || loc.getZ() < -250) {
             return -1;
@@ -75,6 +94,24 @@ public abstract class IslandCreator {
         }
 
         return false;
+    }
+
+    public static void setIslandSpawn(int position, Location loc) {
+        try {
+            PreparedStatement enterIslandToDatabaseStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                    "UPDATE `islands` SET home_x=?, home_y=?, home_z=? WHERE position=?"
+            );
+
+            enterIslandToDatabaseStatement.setInt(4, position);
+            enterIslandToDatabaseStatement.setFloat(1, (float) loc.getX());
+            enterIslandToDatabaseStatement.setFloat(2, (float) loc.getY());
+            enterIslandToDatabaseStatement.setFloat(3, (float) loc.getZ());
+
+            enterIslandToDatabaseStatement.executeUpdate();
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private static void spawnIsland(Location location) {
