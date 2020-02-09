@@ -142,8 +142,81 @@ public class CoreApi {
         return 0;
     }
 
-    public String getUuidOfPlayerId(int id) {
+    public int getIdOfRankByName(String rankName) {
+        try {
+            ResultSet rankIdQuery = CoreApi.getInstance().getSql().resultStatement("SELECT id FROM ranks WHERE name=" + rankName);
+            if (!rankIdQuery.next()) {
+                return -1;
+            }
+            return rankIdQuery.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 
+    public int getPowerOfRank(int rankId) {
+        try {
+            ResultSet rankPowerQuery = CoreApi.getInstance().getSql().resultStatement("SELECT power FROM ranks WHERE id=" + rankId);
+            if (!rankPowerQuery.next()) {
+                return -1;
+            }
+            return rankPowerQuery.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public List<Integer> getAllRankIdsOfPlayer(int playerId) {
+        List<Integer> allRanks = new ArrayList<>();
+        try {
+            ResultSet allRanksQuery = CoreApi.getInstance().getSql().resultStatement("SELECT id FROM player_ranks WHERE player=" + playerId);
+            while (allRanksQuery.next()) {
+                allRanks.add(allRanksQuery.getInt(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return allRanks;
+    }
+
+    public String getHighestRankIdOfPlayer(int playerId) {
+        try {
+            List<String> allRanks = new ArrayList<>();
+            ResultSet allRanksQuery = CoreApi.getInstance().getSql().resultStatement("SELECT rank FROM player_ranks WHERE player=" + playerId);
+            while (allRanksQuery.next()) {
+                allRanks.add(allRanksQuery.getString(1));
+            }
+            if (allRanks.size() == 0) {
+                return "default";
+            }
+            String highest = allRanks.get(0);
+            int highest_power
+
+            for (String rank : allRanks) {
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "default";
+    }
+
+    public String getUuidOfPlayerId(int id) {
+        try {
+            PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT uuid FROM users WHERE id=?");
+            userIdStatement.setString(1, id);
+            ResultSet userIdResult = userIdStatement.executeQuery();
+            if (!userIdResult.next()) {
+                return null;
+            }
+            return userIdResult.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<String> getPlayerPermissions(String uuid) {
