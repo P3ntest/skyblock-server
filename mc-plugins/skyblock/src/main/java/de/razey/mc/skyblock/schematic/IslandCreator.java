@@ -235,7 +235,7 @@ public abstract class IslandCreator {
         }
         if (rank == "") return;
         try {
-            CoreApi.getInstance().getSql().updateStatement("INSERT INTO 'island_members' ('player', 'owner', 'rank') VALUES (" + player +"," + owner + ",'" + rank + "')");
+            CoreApi.getInstance().getSql().updateStatement("INSERT INTO `island_members`(player, owner, rank) VALUES (" + player +", " + owner + ", '" + rank + "')");
         } catch (SQLException e) {
             e.printStackTrace();
         }
