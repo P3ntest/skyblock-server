@@ -155,6 +155,28 @@ public class CoreApi {
         return -1;
     }
 
+    public float getDefaultBalance() {
+        return 2000.0f;
+    }
+
+    private void enterPlayerToSkyblockStats(int playerId) {
+
+    }
+
+    public float getSkyblockBalanceOfPlayerId(int playerId) {
+        enterPlayerToSkyblockStats(playerId);
+        try {
+            ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT balance FROM skyblock_stats WHERE id=" + playerId);
+            if (!result.next()) {
+                return -1;
+            }
+            return result.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public int getPowerOfRank(int rankId) {
         try {
             ResultSet rankPowerQuery = CoreApi.getInstance().getSql().resultStatement("SELECT power FROM ranks WHERE id=" + rankId);
