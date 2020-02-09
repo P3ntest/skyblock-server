@@ -9,7 +9,6 @@ import javax.annotation.Nullable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,6 +81,26 @@ public class CoreApi {
         }
     }
 
+
+    public String getPlayerNameFromId(int id) {
+        try {
+            PreparedStatement ps = sql.getConnection().prepareStatement("SELECT username FROM users WHERE id=?");
+            ps.setInt(1, id);
+            ResultSet result = ps.executeQuery();
+            if (!result.next()) {
+                return null;
+            }
+            return result.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String getPlayerNameFromUuid(String uuid) {
+        return getUsername(uuid);
+    }
+
     public String getUsername(String uuid) {
         try {
             PreparedStatement ps = sql.getConnection().prepareStatement("SELECT username FROM users WHERE uuid=?");
@@ -127,6 +146,10 @@ public class CoreApi {
         return 0;
     }
 
+    public int getPlayerIdFromUuid(String uuid) {
+        return getPlayerId(uuid);
+    }
+
     public int getIdOfRankByName(String rankName) {
         try {
             ResultSet rankIdQuery = CoreApi.getInstance().getSql().resultStatement("SELECT id FROM ranks WHERE name=" + rankName);
@@ -140,12 +163,19 @@ public class CoreApi {
         return -1;
     }
 
-    public float getDefaultBalance() {
+    public float getDefaultSkyblockBalance() {
         return 2000.0f;
     }
 
     private void enterPlayerToSkyblockStats(int playerId) {
-
+        try {
+            ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT balance FROM skyblock_stats WHERE id=" + playerId);
+            if (!result.next()) {
+                CoreApi.getInstance().getSql().resultStatement("INSERT INTO `skyblock_stats`(`player`, `balance`) VALUES (" + playerId + ", " + getDefaultSkyblockBalance() + ")");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public float getSkyblockBalanceOfPlayerId(int playerId) {
@@ -160,6 +190,28 @@ public class CoreApi {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public void modifySkyblockBalanceOfPlayerId(int playerId, float addition) {
+        enterPlayerToSkyblockStats(playerId);
+        try {
+            CoreApi.getInstance().getSql().updateStatement("UPDATE UPDATE `skyblock_stats` SET `balance`=`balance`+" + addition + " WHERE player="+ playerId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setSkyblockBalanceOfPlayerId(int playerId, float value) {
+        enterPlayerToSkyblockStats(playerId);
+        try {
+            CoreApi.getInstance().getSql().updateStatement("UPDATE UPDATE `skyblock_stats` SET `balance`=" + value + " WHERE player="+ playerId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getCorrectPlayerName(String wrongName) {
+        return getpl getPlayerIdFromName(wrongName);
     }
 
     public int getPowerOfRank(int rankId) {
