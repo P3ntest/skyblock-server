@@ -182,32 +182,40 @@ public class CoreApi {
         return allRanks;
     }
 
-    /*public String getHighestRankIdOfPlayer(int playerId) {
+    public int getDefaultRankId() {
         try {
-            List<String> allRanks = new ArrayList<>();
-            ResultSet allRanksQuery = CoreApi.getInstance().getSql().resultStatement("SELECT rank FROM player_ranks WHERE player=" + playerId);
-            while (allRanksQuery.next()) {
-                allRanks.add(allRanksQuery.getString(1));
-            }
-            if (allRanks.size() == 0) {
-                return "default";
-            }
-            String highest = allRanks.get(0);
-            int highest_power
-
-            for (String rank : allRanks) {
-
-            }
+            ResultSet defaultRankQuery = CoreApi.getInstance().getSql().resultStatement("SELECT id FROM ranks WHERE power=0");
+            defaultRankQuery.next();
+            return defaultRankQuery.getInt(1);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return "default";
-    }*/
+        return -1;
+    }
+
+    public int getHighestRankIdOfPlayer(int playerId) {
+        List<Integer> allRanks = getAllRankIdsOfPlayer(playerId);
+        if (allRanks.size() == 0) {
+            return getDefaultRankId();
+        }
+        int highest = allRanks.get(0);
+        int highest_power = getPowerOfRank(highest);
+
+        for (int rank : allRanks) {
+            int power = getPowerOfRank(rank);
+                if (power > highest_power) {
+                    highest_power = power;
+                    highest = rank;
+                }
+        }
+
+        return highest;
+    }
 
     public String getUuidOfPlayerId(int id) {
         try {
             PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT uuid FROM users WHERE id=?");
-            userIdStatement.setString(1, id);
+            userIdStatement.setInt(1, id);
             ResultSet userIdResult = userIdStatement.executeQuery();
             if (!userIdResult.next()) {
                 return null;
