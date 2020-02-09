@@ -28,7 +28,7 @@ public class SkyblockIslandCommand implements CommandExecutor {
         }
 
         if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("remove") || args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("rm")) {
+            if (args[0].equalsIgnoreCase("delete")) {
                 if (args.length == 1) {
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.confirm", "skyblock");
                     return true;
@@ -54,6 +54,73 @@ public class SkyblockIslandCommand implements CommandExecutor {
                 CoreApi.getInstance().displayMessage(player, "skyblock.island.sethome.done", "skyblock");
                 return true;
             }
+
+            if (args[0].equalsIgnoreCase("add")) {
+                   if(args.length == 1) {
+                       CoreApi.getInstance().displayMessage(player, "skyblock.island.no-player", "skyblock");
+                       return true;
+                   }
+                   int playerToAdd = 0;//CoreApi.getInstance().getPlayerId();
+                if(playerToAdd == -1) {
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.wrong-id", "skyblock");
+                    return true;
+                }
+                else {
+                    IslandCreator.setPlayerRank(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()), playerToAdd, "add");
+                    return true;
+                }
+            }
+
+            if (args[0].equalsIgnoreCase("promote")) {
+                if(args.length == 1) {
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.no-player", "skyblock");
+                    return true;
+                }
+                int playerToAdd = 0;//CoreApi.getInstance().getPlayerId();
+                if(playerToAdd == -1) {
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.wrong-id", "skyblock");
+                    return true;
+                }
+                else {
+                    switch (IslandCreator.getPlayerRank(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()), playerToAdd)){
+                        case "add":
+                            IslandCreator.setPlayerRank(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()), playerToAdd, "trust");
+                            break;
+                        case "trust":
+                            IslandCreator.setPlayerRank(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()), playerToAdd, "mod");
+                            break;
+                    }
+                    return true;
+                }
+            }
+
+            if (args[0].equalsIgnoreCase("demote")) {
+                if(args.length == 1) {
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.no-player", "skyblock");
+                    return true;
+                }
+                int playerToAdd = 0;//CoreApi.getInstance().getPlayerId();
+                if(playerToAdd == -1) {
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.wrong-id", "skyblock");
+                    return true;
+                }
+                else {
+                    switch (IslandCreator.getPlayerRank(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()), playerToAdd)){
+                        case "add":
+                            IslandCreator.setPlayerRank(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()), playerToAdd, "");
+                            break;
+                        case "trust":
+                            IslandCreator.setPlayerRank(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()), playerToAdd, "add");
+                            break;
+                        case "mod":
+                            IslandCreator.setPlayerRank(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()), playerToAdd, "trust");
+                            break;
+                    }
+                    return true;
+                }
+            }
+
+            
 
             return true;
         }

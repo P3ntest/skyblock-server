@@ -209,4 +209,36 @@ public abstract class IslandCreator {
         }
     }
 
+    public static String getPlayerRank(int owner, int player) {
+        try {
+            PreparedStatement getIslandPositionStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                    "SELECT rank FROM island_members WHERE player=? AND owner=?"
+            );
+            getIslandPositionStatement.setInt(1, player);
+            getIslandPositionStatement.setInt(2, owner);
+            ResultSet getIslandPositionResult = getIslandPositionStatement.executeQuery();
+            if (!getIslandPositionResult.next()) {
+                return "";
+            }
+            return getIslandPositionResult.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public static void setPlayerRank(int owner, int player, String rank) {
+        try {
+            CoreApi.getInstance().getSql().updateStatement("DELETE FROM island_members WHERE player=" + player + " AND owner=" + owner);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (rank == "") return;
+        try {
+            CoreApi.getInstance().getSql().updateStatement("INSERT INTO island_members (player, owner, rank) VALUES (" + player +"," + owner + "," + rank + ")");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return;
+    }
 }
