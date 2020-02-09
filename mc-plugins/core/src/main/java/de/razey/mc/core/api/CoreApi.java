@@ -211,7 +211,7 @@ public class CoreApi {
     }
 
     public String getCorrectPlayerName(String wrongName) {
-        return getpl getPlayerIdFromName(wrongName);
+        return getPlayerNameFromId(getPlayerIdFromName(wrongName));
     }
 
     public int getPowerOfRank(int rankId) {
