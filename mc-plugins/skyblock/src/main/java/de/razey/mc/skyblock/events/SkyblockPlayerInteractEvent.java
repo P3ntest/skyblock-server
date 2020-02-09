@@ -8,7 +8,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class SkyblockPlayerInteractEvent implements Listener {
     @EventHandler
-    public void noUproot(PlayerInteractEvent event)
+    public void onPlayerInteract(PlayerInteractEvent event)
     {
         if(event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType().equals(Material.valueOf("SOIL")))
             event.setCancelled(true);

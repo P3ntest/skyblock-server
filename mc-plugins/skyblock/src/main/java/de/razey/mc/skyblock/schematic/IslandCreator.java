@@ -80,19 +80,13 @@ public abstract class IslandCreator {
     }
 
     public static boolean isOnOwnIsland(Player p) {
-        try {
-            int ppos = getIslandPosition(p.getUniqueId().toString());
-            if (ppos == -1) {
-                return false;
-            }
-            if (ppos == getIslandOfLocation(p.getLocation())) {
-                return true;
-            }
+        int ppos = getIslandPosition(p.getUniqueId().toString());
+        if (ppos == -1) {
             return false;
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
-
+        if (ppos == getIslandOfLocation(p.getLocation())) {
+            return true;
+        }
         return false;
     }
 
@@ -128,16 +122,21 @@ public abstract class IslandCreator {
         }
     }
 
-    private static int getIslandPosition(String uuid) throws SQLException {
-        PreparedStatement getIslandPositionStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
-                "SELECT position FROM islands WHERE owner=?"
-        );
-        getIslandPositionStatement.setInt(1, CoreApi.getInstance().getPlayerId(uuid));
-        ResultSet getIslandPositionResult = getIslandPositionStatement.executeQuery();
-        if (!getIslandPositionResult.next()) {
-            return -1;
+    public static int getIslandPosition(String uuid) {
+        try {
+            PreparedStatement getIslandPositionStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                    "SELECT position FROM islands WHERE owner=?"
+            );
+            getIslandPositionStatement.setInt(1, CoreApi.getInstance().getPlayerId(uuid));
+            ResultSet getIslandPositionResult = getIslandPositionStatement.executeQuery();
+            if (!getIslandPositionResult.next()) {
+                return -1;
+            }
+            return getIslandPositionResult.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return getIslandPositionResult.getInt(1);
+        return -1;
     }
 
     private static Location centerLocation(Location location) {
@@ -159,11 +158,7 @@ public abstract class IslandCreator {
 
     public static void eraseIsland(Player p) {
         int position = -1;
-        try {
-            position = getIslandPosition(p.getUniqueId().toString());
-        }   catch (SQLException e) {
-            e.printStackTrace();
-        }
+        position = getIslandPosition(p.getUniqueId().toString());
 
         World world = new BukkitWorld(Bukkit.getWorld("islands"));
         EditSession editSession = new EditSessionBuilder(world).fastmode(true).build();

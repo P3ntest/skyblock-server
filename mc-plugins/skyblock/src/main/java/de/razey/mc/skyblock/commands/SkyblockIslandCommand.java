@@ -3,16 +3,10 @@ package de.razey.mc.skyblock.commands;
 import de.razey.mc.core.api.CoreApi;
 import de.razey.mc.skyblock.schematic.IslandCreator;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.hamcrest.core.Is;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class SkyblockIslandCommand implements CommandExecutor {
 
@@ -23,23 +17,13 @@ public class SkyblockIslandCommand implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        try {
-            PreparedStatement doesUserHaveIslandStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
-                    "SELECT position FROM islands WHERE owner=?"
-            );
-            doesUserHaveIslandStatement.setInt(1, CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()));
-            ResultSet doesUserHaveIslandResult = doesUserHaveIslandStatement.executeQuery();
-
-            if (!doesUserHaveIslandResult.next()) {
-                IslandCreator.createIslandForPlayer(player);
-                return true;
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        if (IslandCreator.getIslandPosition(player.getUniqueId().toString()) == -1) {
+            IslandCreator.createIslandForPlayer(player);
+            return true;
         }
 
         if (args.length == 0) {
-            //player.teleport(IslandCreator.getIslandSpawn())
+            player.teleport(IslandCreator.getIslandSpawn(IslandCreator.getIslandPosition(player.getUniqueId().toString())));
             return true;
         }
 
