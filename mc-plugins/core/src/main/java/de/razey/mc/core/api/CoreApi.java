@@ -127,6 +127,25 @@ public class CoreApi {
         return 0;
     }
 
+    public int getPlayerIdFromUuid(String uuid) {
+        try {
+            PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT id FROM users WHERE uuid=?");
+            userIdStatement.setString(1, uuid);
+            ResultSet userIdResult = userIdStatement.executeQuery();
+            if (!userIdResult.next()) {
+                return -1;
+            }
+            return userIdResult.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public String getUuidOfPlayerId(int id) {
+
+    }
+
     public List<String> getPlayerPermissions(String uuid) {
         List<String> permissions = new ArrayList<>();
 
