@@ -205,8 +205,10 @@ public abstract class IslandCreator {
             e.printStackTrace();
         } finally {
             spawnIsland(location);
-            player.teleport(location);
         }
+        CoreApi.getInstance().displayMessage(player, "skyblock.island.create.done", "skyblock");
+        player.teleport(location);
+
     }
 
     public static String getPlayerRank(int owner, int player) {
