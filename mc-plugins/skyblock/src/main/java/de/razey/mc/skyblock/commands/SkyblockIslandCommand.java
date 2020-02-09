@@ -56,17 +56,21 @@ public class SkyblockIslandCommand implements CommandExecutor {
             }
 
             if (args[0].equalsIgnoreCase("add")) {
-                   if(args.length == 1) {
-                       CoreApi.getInstance().displayMessage(player, "skyblock.island.no-player", "skyblock");
-                       return true;
-                   }
-                   int playerToAdd = 0;//CoreApi.getInstance().getPlayerId();
+                if(args.length == 1) {
+                   CoreApi.getInstance().displayMessage(player, "skyblock.island.no-player", "skyblock");
+                   return true;
+                }
+                int playerToAdd = CoreApi.getInstance().getPlayerIdFromName(args[1]);
                 if(playerToAdd == -1) {
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.wrong-id", "skyblock");
                     return true;
                 }
                 else {
                     IslandCreator.setPlayerRank(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString()), playerToAdd, "add");
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.add-" + args[1], "skyblock"); //message name
+                    if (Bukkit.getPlayer(CoreApi.getInstance().getUuidOfPlayerId(playerToAdd)) {
+                        CoreApi.getInstance().displayMessage(CoreApi.getInstance().getPlayerNameFromId(), "skyblock.island.", "skyblock");
+                    }
                     return true;
                 }
             }
@@ -119,8 +123,6 @@ public class SkyblockIslandCommand implements CommandExecutor {
                     return true;
                 }
             }
-
-            
 
             return true;
         }
