@@ -182,7 +182,7 @@ public class CoreApi {
         return allRanks;
     }
 
-    public String getHighestRankIdOfPlayer(int playerId) {
+    /*public String getHighestRankIdOfPlayer(int playerId) {
         try {
             List<String> allRanks = new ArrayList<>();
             ResultSet allRanksQuery = CoreApi.getInstance().getSql().resultStatement("SELECT rank FROM player_ranks WHERE player=" + playerId);
@@ -202,7 +202,7 @@ public class CoreApi {
             e.printStackTrace();
         }
         return "default";
-    }
+    }*/
 
     public String getUuidOfPlayerId(int id) {
         try {
