@@ -1,0 +1,12 @@
+name: Skyblock
+author: P3ntest
+authors:
+  - P3ntest
+  - Razey
+  - Razey-Team
+version: 1.0
+depend: [ServerCore]
+main: de.razey.mc.skyblock.Main
+commands:
+  island:
+    aliases: [is, skyblock, skyisland, si]
