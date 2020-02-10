@@ -242,7 +242,7 @@ public abstract class IslandCreator {
         }
         return 0;
     }
-
+    
     public static void eraseIsland(Player p) {
         int position = -1;
         position = getIslandPosition(p.getUniqueId().toString());

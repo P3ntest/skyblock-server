@@ -30,7 +30,6 @@ public class SkyblockBlockChangeEvent implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         e.setCancelled(!mayPerform(e.getPlayer(), e.getBlock().getLocation()));
-        e.getPlayer().sendMessage("" + IslandCreator.getIslandOfLocation(e.getBlock().getLocation()));
     }
 
     @EventHandler

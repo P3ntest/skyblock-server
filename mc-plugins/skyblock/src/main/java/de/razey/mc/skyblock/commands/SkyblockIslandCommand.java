@@ -66,8 +66,8 @@ public class SkyblockIslandCommand implements CommandExecutor {
                 return true;
             }
 
-            if (args[0].equalsIgnoreCase("add") ||
-                    args[0].equalsIgnoreCase("promote")
+            if (args[0].equalsIgnoreCase("add")
+                    || args[0].equalsIgnoreCase("promote")
                     || args[0].equalsIgnoreCase("demote")
                     || args[0].equalsIgnoreCase("remove")
                     || args[0].equalsIgnoreCase("rm"))
