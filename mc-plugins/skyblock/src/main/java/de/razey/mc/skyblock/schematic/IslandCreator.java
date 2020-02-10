@@ -15,6 +15,7 @@ import de.razey.mc.core.api.CoreApi;
 import de.razey.mc.skyblock.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -22,7 +23,10 @@ import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class IslandCreator {
 
@@ -67,19 +71,86 @@ public abstract class IslandCreator {
         return null;
     }
 
-    public static int getIslandOfLocation(Location loc) {
+    public static int  getIslandOfLocation(Location loc) {
+        if (loc.getWorld() != Bukkit.getWorld("islands")) {
+            return -1;
+        }
+
         if (loc.getZ() > 250 || loc.getZ() < -250) {
             return -1;
         }
-        double boundX = loc.getX() % islandPadding;
+
+        int position = (int) Math.round(loc.getX() / islandPadding);
+
+        double boundX = loc.getX() - islandPadding * position;
         if (boundX  > 250 || boundX < -250) {
             return -1;
         }
 
-        return (int) Math.round(boundX / islandPadding);
+        return (int) Math.round(loc.getX() / islandPadding);
     }
 
-    public static boolean isOnOwnIsland(Player p) {
+    public static boolean mayBuildOnIsland(Player p, int island) {
+        if (getIslandPosition(p.getUniqueId().toString()) == island) {
+            return true;
+        }
+
+        if (island == -1) {
+            return false;
+        }
+
+        String rank = getPlayerRank(getIslandOwner(island), CoreApi.getInstance().getPlayerId(p.getUniqueId().toString()));
+
+        if (rank == "trust" || rank == "promote") {
+            return true;
+        }
+
+        if (rank == "") {
+            return false;
+        }
+
+        //Rank == "add"
+        if (getOnlineModsAndOwnerOfIsland(island).size() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+        public static List<Player> getOnlineModsAndOwnerOfIsland(int position) {
+            List<Player> online = new ArrayList<>();
+
+            for (int mod : getIdOfModsAndOwnerOfIsland(position)) {
+                Player p = Bukkit.getPlayer(UUID.fromString(CoreApi.getInstance().getUuidFromPlayerId(mod)));
+                if (p != null) {
+                    online.add(p);
+                }
+            }
+
+            return online;
+        }
+
+        public static List<Integer> getIdOfModsAndOwnerOfIsland(int position) {
+            try {
+                List<Integer> online = new ArrayList<>();
+                online.add(getIslandOwner(position));
+                ResultSet mods = CoreApi.getInstance().getSql().resultStatement(
+                        "SELECT player FROM island_members WHERE owner=" + getIslandOwner(position) + " AND rank='mod'");
+
+                while (mods.next()) {
+                    online.add(mods.getInt(1));
+                }
+                return online;
+            }catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        public static boolean isOnOwnIsland(Player p) {
+            if (p.getLocation().getWorld() != Bukkit.getWorld("islands"))
+                return false;
+
         int ppos = getIslandPosition(p.getUniqueId().toString());
         if (ppos == -1) {
             return false;
@@ -154,6 +225,22 @@ public abstract class IslandCreator {
 
         enterIslandToDatabaseStatement.setInt(1, position);
         enterIslandToDatabaseStatement.executeUpdate();
+
+        CoreApi.getInstance().getSql().updateStatement("DELETE FROM island_members WHERE owner=" + getIslandOwner(position));
+    }
+
+    public static int getIslandOwner(int position) {
+        try {
+            ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT owner FROM islands WHERE position=" + position);
+            if (!result.next()) {
+                return -1;
+            }
+            result.next();
+            return result.getInt(1);
+        } catch (SQLException e) {
+
+        }
+        return 0;
     }
 
     public static void eraseIsland(Player p) {

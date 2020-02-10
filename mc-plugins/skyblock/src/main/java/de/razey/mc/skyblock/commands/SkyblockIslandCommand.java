@@ -1,6 +1,7 @@
 package de.razey.mc.skyblock.commands;
 
 import de.razey.mc.core.api.CoreApi;
+import de.razey.mc.skyblock.Main;
 import de.razey.mc.skyblock.schematic.IslandCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -30,16 +31,19 @@ public class SkyblockIslandCommand implements CommandExecutor {
         }
 
         if (args.length > 0) {
-            int playerid = CoreApi.getInstance().getPlayerId(player.getUniqueId().toString());
-            String name = CoreApi.getInstance().getCorrectPlayerName(args[1]);
-            int playerToAdd = CoreApi.getInstance().getPlayerIdFromName(args[1]);
-            Player playerToAddUuid = Bukkit.getPlayer(UUID.fromString(CoreApi.getInstance().getUuidOfPlayerId(playerToAdd)));
-            if (args[0].equalsIgnoreCase("delete")) {
+            if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("del")) {
+                if (!IslandCreator.isOnOwnIsland(player)) {
+                    CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.wrong-island", "skyblock");
+                    return true;
+                }
+
                 if (args.length == 1) {
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.confirm", "skyblock");
                     return true;
                 }
                 if (args[1].equalsIgnoreCase(   "confirm")) {
+                    System.out.println(Main.worldSpawn());
+                    player.teleport(Main.worldSpawn());
                     IslandCreator.eraseIsland(player);
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.done", "skyblock");
                     return true;
@@ -62,11 +66,16 @@ public class SkyblockIslandCommand implements CommandExecutor {
             }
 
             if (args[0].equalsIgnoreCase("add")) {
-
                 if(args.length == 1) {
                    CoreApi.getInstance().displayMessage(player, "skyblock.island.no-player", "skyblock");
                    return true;
                 }
+
+                int playerid = CoreApi.getInstance().getPlayerId(player.getUniqueId().toString());
+                String name = CoreApi.getInstance().getCorrectPlayerName(args[1]);
+                int playerToAdd = CoreApi.getInstance().getPlayerIdFromName(args[1]);
+                Player playerToAddUuid = Bukkit.getPlayer(UUID.fromString(CoreApi.getInstance().getUuidOfPlayerId(playerToAdd)));
+
                 if(playerToAdd == -1) {
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.wrong-id", "skyblock");
                     return true;
@@ -86,6 +95,12 @@ public class SkyblockIslandCommand implements CommandExecutor {
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.no-player", "skyblock");
                     return true;
                 }
+
+                int playerid = CoreApi.getInstance().getPlayerId(player.getUniqueId().toString());
+                String name = CoreApi.getInstance().getCorrectPlayerName(args[1]);
+                int playerToAdd = CoreApi.getInstance().getPlayerIdFromName(args[1]);
+                Player playerToAddUuid = Bukkit.getPlayer(UUID.fromString(CoreApi.getInstance().getUuidOfPlayerId(playerToAdd)));
+
                 if(playerToAdd == -1) {
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.wrong-id", "skyblock");
                     return true;
@@ -112,6 +127,12 @@ public class SkyblockIslandCommand implements CommandExecutor {
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.no-player", "skyblock");
                     return true;
                 }
+
+                int playerid = CoreApi.getInstance().getPlayerId(player.getUniqueId().toString());
+                String name = CoreApi.getInstance().getCorrectPlayerName(args[1]);
+                int playerToAdd = CoreApi.getInstance().getPlayerIdFromName(args[1]);
+                Player playerToAddUuid = Bukkit.getPlayer(UUID.fromString(CoreApi.getInstance().getUuidOfPlayerId(playerToAdd)));
+
                 if(playerToAdd == -1) {
                     CoreApi.getInstance().displayMessage(player, "skyblock.island.wrong-id", "skyblock");
                     return true;

@@ -210,9 +210,9 @@ public class CoreApi {
 
     private void enterPlayerToSkyblockStats(int playerId) {
         try {
-            ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT balance FROM skyblock_stats WHERE id=" + playerId);
+            ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT balance FROM skyblock_stats WHERE player=" + playerId);
             if (!result.next())
-                CoreApi.getInstance().getSql().resultStatement("INSERT INTO `skyblock_stats`(`player`, `balance`) VALUES (" + playerId + ", " + getDefaultSkyblockBalance() + ")");
+                CoreApi.getInstance().getSql().updateStatement("INSERT INTO `skyblock_stats`(`player`, `balance`, `level`, `xp`) VALUES (" + playerId + ", " + getDefaultSkyblockBalance() + ", 1, 0)");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -221,7 +221,7 @@ public class CoreApi {
     public float getSkyblockBalanceFromPlayerId(int playerId) {
         enterPlayerToSkyblockStats(playerId);
         try {
-            ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT balance FROM skyblock_stats WHERE id=" + playerId);
+            ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT balance FROM skyblock_stats WHERE player=" + playerId);
             if (!result.next())
                 return -1;
             return result.getInt(1);
@@ -456,6 +456,95 @@ public class CoreApi {
         return getDefaultLanguage();
     }
 
+    public int getSkyblockLevelFromPlayerId(int playerId) {
+        enterPlayerToSkyblockStats(playerId);
+        try {
+            ResultSet result = sql.resultStatement("SELECT level FROM skyblock_stats WHERE player=" + playerId);
+
+            if (!result.next())
+                return 1;
+
+            return result.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 1;
+    }
+
+    public int getSkyblockXpFromPlayerId(int playerId) {
+        enterPlayerToSkyblockStats(playerId);
+        try {
+            ResultSet result = sql.resultStatement("SELECT xp FROM skyblock_stats WHERE player=" + playerId);
+
+            if (!result.next())
+                return 0;
+
+            return result.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public int getSkyblockXpNeededForLevelUp(int currentLevel) {
+        return 100 * 2 ^ currentLevel;
+    }
+
+    public void setSkyblockXpForPlayerId(int playerId, int xp) {
+        enterPlayerToSkyblockStats(playerId);
+        try {
+            CoreApi.getInstance().getSql().updateStatement("UPDATE skyblock_stats SET xp=" + xp + " WHERE player=" + playerId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setSkyblockLevelForPlayerId(int playerId, int level) {
+        enterPlayerToSkyblockStats(playerId);
+        try {
+            CoreApi.getInstance().getSql().updateStatement("UPDATE skyblock_stats SET level=" + level + " WHERE player=" + playerId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void modifySkyblockLevelForPlayerId(int playerId, int levelAmount) {
+        enterPlayerToSkyblockStats(playerId);
+        try {
+            CoreApi.getInstance().getSql().updateStatement("UPDATE skyblock_stats SET level=level+" + levelAmount + " WHERE player=" + playerId);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Gives a Player xp
+     *
+     * @param amount The amount of XP to add.
+     * @param checkLevel Wenn this is true, the level will be returned, and a level-Up is checked and executed if needed.
+     * @return Returns the level of the player, when he got a Level-Up, otherwise always -1
+     */
+    public int giveSkyblockXpToPlayerId(int amount, int playerId, boolean checkLevel) {
+        enterPlayerToSkyblockStats(playerId);
+        try {
+            CoreApi.getInstance().getSql().updateStatement("UPDATE skyblock_stats SET xp=xp+" + amount + " WHERE player=" + playerId);
+            if (checkLevel) {
+                int currentLevel = getSkyblockLevelFromPlayerId(playerId);
+                int neededForNextLevel = getSkyblockXpNeededForLevelUp(currentLevel);
+                int currentXp = getSkyblockXpFromPlayerId(playerId);
+                if (neededForNextLevel <= currentXp) {
+                    setSkyblockXpForPlayerId(playerId, currentXp - neededForNextLevel);
+                    modifySkyblockLevelForPlayerId(playerId, 1);
+                    return currentLevel + 1;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
     public void displayMessage(Player p, String message, @Nullable String plugin, String... args) {
         String prefix = getPluginPrefix(plugin);
 
@@ -473,7 +562,7 @@ public class CoreApi {
         }
 
         for (int i = 0; i < args.length; i++)
-            printMessage.replaceAll("%" + (i + 1) + "%", args[i]);
+            printMessage = printMessage.replaceAll("%" + (i + 1) + "%", args[i]);
 
         p.sendMessage(prefix + printMessage);
     }
