@@ -118,50 +118,50 @@ public abstract class IslandCreator {
         return false;
     }
 
-        public static List<Player> getOnlineModsAndOwnerOfIsland(int position) {
-            List<Player> online = new ArrayList<>();
+    public static List<Player> getOnlineModsAndOwnerOfIsland(int position) {
+        List<Player> online = new ArrayList<>();
 
-            for (int mod : getIdOfModsAndOwnerOfIsland(position)) {
-                Player p = Bukkit.getPlayer(UUID.fromString(CoreApi.getInstance().getUuidFromPlayerId(mod)));
-                if (p != null) {
-                    online.add(p);
-                }
+        for (int mod : getIdOfModsAndOwnerOfIsland(position)) {
+            Player p = Bukkit.getPlayer(UUID.fromString(CoreApi.getInstance().getUuidFromPlayerId(mod)));
+            if (p != null) {
+                online.add(p);
             }
+        }
 
+        return online;
+    }
+
+    public static List<Integer> getIdOfModsAndOwnerOfIsland(int position) {
+        try {
+            List<Integer> online = new ArrayList<>();
+            online.add(getIslandOwner(position));
+            ResultSet mods = CoreApi.getInstance().getSql().resultStatement(
+                    "SELECT player FROM island_members WHERE owner=" + getIslandOwner(position) + " AND rank='mod'");
+
+            while (mods.next()) {
+                online.add(mods.getInt(1));
+            }
             return online;
+        }catch (SQLException e) {
+            e.printStackTrace();
         }
 
-        public static List<Integer> getIdOfModsAndOwnerOfIsland(int position) {
-            try {
-                List<Integer> online = new ArrayList<>();
-                online.add(getIslandOwner(position));
-                ResultSet mods = CoreApi.getInstance().getSql().resultStatement(
-                        "SELECT player FROM island_members WHERE owner=" + getIslandOwner(position) + " AND rank='mod'");
+        return null;
+    }
 
-                while (mods.next()) {
-                    online.add(mods.getInt(1));
-                }
-                return online;
-            }catch (SQLException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        public static boolean isOnOwnIsland(Player p) {
-            if (p.getLocation().getWorld() != Bukkit.getWorld("islands"))
-                return false;
-
-        int ppos = getIslandPosition(p.getUniqueId().toString());
-        if (ppos == -1) {
+    public static boolean isOnOwnIsland(Player p) {
+        if (p.getLocation().getWorld() != Bukkit.getWorld("islands"))
             return false;
-        }
-        if (ppos == getIslandOfLocation(p.getLocation())) {
-            return true;
-        }
+
+    int ppos = getIslandPosition(p.getUniqueId().toString());
+    if (ppos == -1) {
         return false;
     }
+    if (ppos == getIslandOfLocation(p.getLocation())) {
+        return true;
+    }
+    return false;
+}
 
     public static void setIslandSpawn(int position, Location loc) {
         try {

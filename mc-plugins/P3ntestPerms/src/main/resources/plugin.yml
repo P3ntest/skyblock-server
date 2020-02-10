@@ -1,0 +1,15 @@
+name: P3ntestPerms
+version: 1.0
+author: P3ntest
+authors:
+  - P3ntest
+main: me.p3ntest.permissions.Main
+commands:
+  permissions:
+    aliases:
+      - perm
+      - permission
+      - rp
+      - pperm
+      - serverperm
+      - pp
