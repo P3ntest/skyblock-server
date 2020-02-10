@@ -25,7 +25,8 @@ public abstract class IslandMembers {
 
         int playerId = CoreApi.getInstance().getPlayerId(player.getUniqueId().toString());
         String playerToAddName = CoreApi.getInstance().getCorrectPlayerName(args[1]);
-        Player playerToAdd = Bukkit.getPlayer(UUID.fromString(playerToAddName));
+        String playerToAddUuid = CoreApi.getInstance().getUuidFromPlayerId(playerToAddId);
+        Player playerToAdd = Bukkit.getPlayer(UUID.fromString(playerToAddUuid));
 
         switch (args[0]){
             case "add":
