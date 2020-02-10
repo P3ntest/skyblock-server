@@ -1,0 +1,9 @@
+name: SkyblockScoreboard
+version: 1.0
+author: P3ntest
+authors:
+  - P3ntest
+  - Razey
+  - "Razey.de Team"
+main: de.razey.mc.skyblock.scoreboard.Main
+commands:

@@ -91,13 +91,15 @@ public abstract class IslandCreator {
     }
 
     public static boolean mayBuildOnIsland(Player p, int island) {
-        if (getIslandPosition(p.getUniqueId().toString()) == island) {
+        if (getIslandPosition(p.getUniqueId().toString()) == island && island != -1) {
             return true;
         }
 
         if (island == -1) {
             return false;
         }
+
+
 
         String rank = getPlayerRank(getIslandOwner(island), CoreApi.getInstance().getPlayerId(p.getUniqueId().toString()));
 
@@ -235,14 +237,13 @@ public abstract class IslandCreator {
             if (!result.next()) {
                 return -1;
             }
-            result.next();
             return result.getInt(1);
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
         return 0;
     }
-    
+
     public static void eraseIsland(Player p) {
         int position = -1;
         position = getIslandPosition(p.getUniqueId().toString());

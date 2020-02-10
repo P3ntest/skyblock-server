@@ -13,7 +13,13 @@ public abstract class ScoreboardUtils {
 
         String correctPlayerPower = String.format("%07d", (1000000 - playerPower));
 
-        String playerAbbreviation = String.format("%04s", p.getName());
+        String playerAbbreviation = p.getName().substring(0, 2);
+
+        String correctPlayerLevel = String.format("%03d",
+                CoreApi.getInstance().getSkyblockLevelFromPlayerId(
+                        CoreApi.getInstance().getPlayerId(p.getUniqueId().toString())));
+
+        return correctPlayerPower + correctPlayerLevel + playerAbbreviation;
     }
 
 }

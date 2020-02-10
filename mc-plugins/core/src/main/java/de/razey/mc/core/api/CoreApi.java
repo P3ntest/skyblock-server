@@ -4,6 +4,7 @@ import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import de.razey.mc.core.Main;
 import de.razey.mc.core.sql.CoreSql;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
@@ -279,10 +280,32 @@ public class CoreApi {
         return allRanks;
     }
 
+    public String getRankPrefix(int rankId) {
+        try {
+            ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT prefix FROM ranks WHERE id=" + rankId);
+            result.next();
+            return result.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    public String getRankColor(int rankId) {
+        try {
+            ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT color FROM ranks WHERE id=" + rankId);
+            result.next();
+            return result.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
     public int getDefaultRankId() {
         try {
             ResultSet defaultRankQuery = CoreApi.getInstance().getSql().resultStatement("SELECT id FROM ranks WHERE power=0");
-
             defaultRankQuery.next();
 
             return defaultRankQuery.getInt(1);
