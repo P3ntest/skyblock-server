@@ -185,7 +185,7 @@ public class CoreApi {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return 0;
+        return -1;
     }
 
     public int getPlayerIdFromUuid(String uuid) {
