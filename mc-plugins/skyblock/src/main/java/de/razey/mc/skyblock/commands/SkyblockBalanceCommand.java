@@ -19,7 +19,6 @@ public class SkyblockBalanceCommand implements CommandExecutor {
             CoreApi.getInstance().displayMessage(player, "skyblock.balance.display", null,
                     "" + CoreApi.getInstance().getSkyblockBalanceFromPlayerId(CoreApi.getInstance().getPlayerId(player.getUniqueId().toString())));
         }
-
         return false;
     }
 }
