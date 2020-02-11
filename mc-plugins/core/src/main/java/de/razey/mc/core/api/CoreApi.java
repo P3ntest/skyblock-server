@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class yCoreApi {
+public class CoreApi {
 
     private static CoreApi _instance;
 
