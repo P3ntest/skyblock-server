@@ -369,7 +369,7 @@ public class yCoreApi {
     public List<Integer> getAllRankIdsOfPlayer(int playerId) {
         List<Integer> allRanks = new ArrayList<>();
         try {
-            ResultSet allRanksQuery = CoreApi.getInstance().getSql().resultStatement("SELECT id FROM player_ranks WHERE player=" + playerId);
+            ResultSet allRanksQuery = CoreApi.getInstance().getSql().resultStatement("SELECT rank FROM player_ranks WHERE player=" + playerId);
             while (allRanksQuery.next())
                 allRanks.add(allRanksQuery.getInt(1));
         } catch (SQLException e) {
@@ -433,7 +433,6 @@ public class yCoreApi {
      */
     public int getHighestRankIdOfPlayer(int playerId) {
         List<Integer> allRanks = getAllRankIdsOfPlayer(playerId);
-
         if (allRanks.size() == 0)
             return getDefaultRankId();
 
@@ -565,6 +564,40 @@ public class yCoreApi {
         return permissions;
     }
 
+
+    /**
+     * Adds a permissions to a player specifically
+     * @param playerId The Player to add the permission
+     * @param permission The permission to add.
+     */
+    public void addPlayerPermission(int playerId, String permission) {
+        try {
+            getSql().updateStatement("INSERT INTO `player_permissions`(`player`, `permission`) VALUES (" + playerId + ", '" + permission + "')");
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Removes a permissions from a player specifically
+     * @param playerId The Player to revoke the permission from
+     * @param permission The permission to remove.
+     */
+    public void removePlayerPermission(int playerId, String permission) {
+        try {
+            getSql().updateStatement("DELETE FROM `player_permissions` WHERE player=" + playerId + " AND permission='" + permission + "'");
+        }catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean playerHasPermissionSpecifically(int playerId, String permission) {
+        if (getPlayerOnlyPermissions(playerId).contains(permission)) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Gets a chat prefix of a plugin.
      * @param plugin The plugin string id
@@ -670,7 +703,7 @@ public class yCoreApi {
     }
 
     public int getSkyblockXpNeededForLevelUp(int currentLevel) {
-        return 100 * 2 ^ currentLevel;
+        return 100 * ((int) Math.pow(2, currentLevel));
     }
 
     public void setSkyblockXpForPlayerId(int playerId, int xp) {
@@ -760,6 +793,27 @@ public class yCoreApi {
             if (p.hasPermission(permission))
                 displayMessage(p, message, plugin, args);
         }
+    }
+
+
+    /**
+     * Gets a ranks display name based on its id
+     * @param rankid The id of the rank
+     * @return The Display name
+     */
+    public String getRankDisplayNameFromId(int rankid) {
+        try {
+            ResultSet result = getSql().resultStatement("SELECT display_name FROM ranks WHERE id=" + rankid);
+
+            if (!result.next()) {
+                return "";
+            }
+
+            return result.getString(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
     public String getUuidFromPlayer(Player p) {

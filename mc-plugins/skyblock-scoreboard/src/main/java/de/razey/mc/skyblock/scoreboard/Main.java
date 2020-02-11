@@ -1,5 +1,6 @@
 package de.razey.mc.skyblock.scoreboard;
 
+import de.razey.mc.skyblock.scoreboard.events.BlockActionEvents;
 import de.razey.mc.skyblock.scoreboard.events.PlayerEnterEvents;
 import de.razey.mc.skyblock.scoreboard.events.PlayerLeaveEvents;
 import org.bukkit.Bukkit;
@@ -15,6 +16,7 @@ public class Main extends JavaPlugin {
     public void onEnable() {
         this.getServer().getPluginManager().registerEvents(new PlayerEnterEvents(),this);
         this.getServer().getPluginManager().registerEvents(new PlayerLeaveEvents(),this);
+        this.getServer().getPluginManager().registerEvents(new BlockActionEvents(),this);
     }
 
     public void onDisable() {
