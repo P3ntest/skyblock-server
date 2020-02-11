@@ -40,6 +40,10 @@ public class CoreApi {
         }
     }
 
+    /**
+     * Get the instantiated and connect CoreSql object.
+     * @return Instantiated Main CoreSql Object.
+     */
     public CoreSql getSql() {
         return sql;
     }
@@ -48,10 +52,19 @@ public class CoreApi {
         sql.disconnect();
     }
 
+    /**
+     * Get The Main Instance of this class.
+     * @return the Main Instance of this class.
+     */
     public static CoreApi getInstance() {
         return _instance;
     }
 
+    /**
+     * Makes sure, that the correct username of a player is associated in the Database
+     * @param uuid The UUID of the player
+     * @param username The correct Username of the player
+     */
     public void updateUsername(String uuid, String username) {
         try {
             PreparedStatement ps = sql.getConnection().prepareStatement("UPDATE users SET username=? WHERE uuid='" + uuid + "'");
@@ -62,6 +75,10 @@ public class CoreApi {
         }
     }
 
+    /**
+     * Update the time a player was last online in a database according to the current system time.
+     * @param uuid The uuid of the player to update.
+     */
     public void updateLastOnlineTime(String uuid) {
         try {
             PreparedStatement ps = sql.getConnection().prepareStatement("UPDATE users SET last_online=? WHERE uuid='" + uuid + "'");
@@ -72,6 +89,11 @@ public class CoreApi {
         }
     }
 
+    /**
+     * Inserts a player's data into the database.
+     * !! Does not check if player is already in database. !!
+     * @param player The joined Player to add to database.
+     */
     public void playerFirstJoin(Player player) {
         try {
             PreparedStatement ps = sql.getConnection().prepareStatement("INSERT INTO `users`(`uuid`, `username`, `first_online`, `last_online`) VALUES (?, ?, ?, ?)");
@@ -87,7 +109,11 @@ public class CoreApi {
         }
     }
 
-
+    /**
+     * Gets the last_online time of a player from the database
+     * @param id The PlayerId to lookup
+     * @return Date Time in millis
+     */
     public long getLastOnlineFromPlayerId(int id) {
         try {
             ResultSet result = sql.resultStatement("SELECT last_online FROM users WHERE id=" + id);
@@ -99,6 +125,11 @@ public class CoreApi {
         return System.currentTimeMillis();
     }
 
+    /**
+     * Gets the last_online time of a player from the database
+     * @param uuid The Player Uuid to lookup
+     * @return Date Time in millis
+     */
     public long getLastOnlineFromPlayerUuid(String uuid) {
         try {
             ResultSet result = sql.resultStatement("SELECT last_online FROM users WHERE uuid=" + uuid);
@@ -110,6 +141,11 @@ public class CoreApi {
         return System.currentTimeMillis();
     }
 
+    /**
+     * Gets the last_online time of a player from the database
+     * @param name The Player Username to lookup
+     * @return Date Time in millis
+     */
     public long getLastOnlineFromPlayerName(String name) {
         try {
             ResultSet result = sql.resultStatement("SELECT last_online FROM users WHERE LOWER(username)=LOWER(" + name + ")");
@@ -121,6 +157,11 @@ public class CoreApi {
         return System.currentTimeMillis();
     }
 
+    /**
+     * Gets the users Username form its id.
+     * @param id The player ID
+     * @return The players name.
+     */
     public String getPlayerNameFromId(int id) {
         try {
             PreparedStatement ps = sql.getConnection().prepareStatement("SELECT username FROM users WHERE id=?");
@@ -137,10 +178,16 @@ public class CoreApi {
         return null;
     }
 
+    /**
+     * Gets the users Username form its uuid.
+     * @param uuid The player UUID
+     * @return The players name.
+     */
     public String getPlayerNameFromUuid(String uuid) {
         return getUsername(uuid);
     }
 
+    @Deprecated
     public String getUsername(String uuid) {
         try {
             PreparedStatement ps = sql.getConnection().prepareStatement("SELECT username FROM users WHERE uuid=?");
@@ -157,6 +204,7 @@ public class CoreApi {
         return null;
     }
 
+    @Deprecated
     public int getPlayerId(String uuid) {
         try {
             PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT id FROM users WHERE uuid=?");
@@ -173,6 +221,11 @@ public class CoreApi {
         return 0;
     }
 
+    /**
+     * Gets the users id form its name, ignore case.
+     * @param name The player name
+     * @return The players id.
+     */
     public int getPlayerIdFromName(String name) {
         try {
             PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT id FROM users WHERE LOWER(username)=LOWER(?)");
@@ -189,10 +242,20 @@ public class CoreApi {
         return -1;
     }
 
+    /**
+     * Get the Players Id from its uuid
+     * @param uuid The players uuid.
+     * @return The players id.
+     */
     public int getPlayerIdFromUuid(String uuid) {
         return getPlayerId(uuid);
     }
 
+    /**
+     * Gets the ID of an rank from its name
+     * @param rankName The name of the rank.
+     * @return The id of the rank.
+     */
     public int getIdOfRankByName(String rankName) {
         try {
             ResultSet rankIdQuery = CoreApi.getInstance().getSql().resultStatement("SELECT id FROM ranks WHERE name=" + rankName);
@@ -205,10 +268,17 @@ public class CoreApi {
         return -1;
     }
 
+    /**
+     * @return The default start Skyblok Balance.
+     */
     public float getDefaultSkyblockBalance() {
         return 2000.0f;
     }
 
+    /**
+     * Ensures that a player is entered in the 'skyblock_stats' table and adds him if he is not entered.
+     * @param playerId The id of the player to enter.
+     */
     private void enterPlayerToSkyblockStats(int playerId) {
         try {
             ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT balance FROM skyblock_stats WHERE player=" + playerId);
@@ -219,6 +289,11 @@ public class CoreApi {
         }
     }
 
+    /**
+     * Gets a players skyblock balance from the player id. Runs @enterPlayerToSkyblockStats pre logic.
+     * @param playerId The id of the player.
+     * @return The Balance of the player.
+     */
     public float getSkyblockBalanceFromPlayerId(int playerId) {
         enterPlayerToSkyblockStats(playerId);
         try {
@@ -232,6 +307,10 @@ public class CoreApi {
         return 0;
     }
 
+    /**
+     * Modifys the players skyblock balance from the player id. Runs @enterPlayerToSkyblockStats pre logic.
+     * @param playerId The id of the player.
+     */
     public void modifySkyblockBalanceFromPlayerId(int playerId, float addition) {
         enterPlayerToSkyblockStats(playerId);
         try {
@@ -243,6 +322,10 @@ public class CoreApi {
         }
     }
 
+    /**
+     * Sets the a players skyblock balance from the player id. Runs @enterPlayerToSkyblockStats pre logic.
+     * @param playerId The id of the player.
+     */
     public void setSkyblockBalanceFromPlayerId(int playerId, float value) {
         enterPlayerToSkyblockStats(playerId);
         try {
@@ -252,10 +335,20 @@ public class CoreApi {
         }
     }
 
+    /**
+     * Gets an case-correct name from an potentionally not case-correct name.
+     * @param wrongName The Name with potential case-errors.
+     * @return The name with correct case.
+     */
     public String getCorrectPlayerName(String wrongName) {
         return getPlayerNameFromId(getPlayerIdFromName(wrongName));
     }
 
+    /**
+     * Gets the power of a rank by its id.
+     * @param rankId The id of the rank.
+     * @return The power of the rank.
+     */
     public int getPowerOfRank(int rankId) {
         try {
             ResultSet rankPowerQuery = CoreApi.getInstance().getSql().resultStatement("SELECT power FROM ranks WHERE id=" + rankId);
@@ -268,6 +361,11 @@ public class CoreApi {
         return -1;
     }
 
+    /**
+     * Gets all ranks a player has.
+     * @param playerId The id of the player
+     * @return A list of rank ids.
+     */
     public List<Integer> getAllRankIdsOfPlayer(int playerId) {
         List<Integer> allRanks = new ArrayList<>();
         try {
@@ -280,6 +378,11 @@ public class CoreApi {
         return allRanks;
     }
 
+    /**
+     * Gets a ranks prefix by its id
+     * @param rankId The ranks id
+     * @return The prefix.
+     */
     public String getRankPrefix(int rankId) {
         try {
             ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT prefix FROM ranks WHERE id=" + rankId);
@@ -291,6 +394,11 @@ public class CoreApi {
         return "";
     }
 
+    /**
+     * Gets a ranks color by its id
+     * @param rankId The id of the rank
+     * @return The color as a String. Can be transformed to a Chatcolor by using ChatColor.valueOf(this)
+     */
     public String getRankColor(int rankId) {
         try {
             ResultSet result = CoreApi.getInstance().getSql().resultStatement("SELECT color FROM ranks WHERE id=" + rankId);
@@ -302,7 +410,10 @@ public class CoreApi {
         return "";
     }
 
-
+    /**
+     * Gets the id of the default rank.
+     * @return The id of the default rank.
+     */
     public int getDefaultRankId() {
         try {
             ResultSet defaultRankQuery = CoreApi.getInstance().getSql().resultStatement("SELECT id FROM ranks WHERE power=0");
@@ -315,6 +426,11 @@ public class CoreApi {
         return -1;
     }
 
+    /**
+     * Gets the id of the rank with the most power out of all ranks belonging to a player by id.
+     * @param playerId The id of the player.
+     * @return The id of the highest rank.
+     */
     public int getHighestRankIdOfPlayer(int playerId) {
         List<Integer> allRanks = getAllRankIdsOfPlayer(playerId);
 
@@ -335,10 +451,16 @@ public class CoreApi {
         return highest;
     }
 
+    /**
+     * Returnes the uuid of a player by its id.
+     * @param id The id of the player.
+     * @return The uuid of the player.
+     */
     public String getUuidFromPlayerId(int id) {
         return getUuidOfPlayerId(id);
     }
 
+    @Deprecated
     public String getUuidOfPlayerId(int id) {
         try {
             PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT uuid FROM users WHERE id=?");
@@ -355,25 +477,13 @@ public class CoreApi {
         return null;
     }
 
-    public List<String> getPlayerPermissions(String uuid) {
+    /**
+     * Gets all permissions belonging to a player specifically.
+     * @param playerId The id of the player
+     * @return A List of Strings corresponding to the players permissions.
+     */
+    public List<String> getPlayerOnlyPermissions(int playerId) {
         List<String> permissions = new ArrayList<>();
-
-        int playerId;
-
-        try {
-            PreparedStatement userIdStatement = sql.getConnection().prepareStatement("SELECT id FROM users WHERE uuid=?");
-
-            userIdStatement.setString(1, uuid);
-
-            ResultSet userIdResult = userIdStatement.executeQuery();
-            if (!userIdResult.next())
-                return null;
-            playerId = userIdResult.getInt(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
-
         try {
             PreparedStatement playerPermissionsStatement = sql.getConnection().prepareStatement("SELECT permission FROM player_permissions WHERE player=?");
 
@@ -385,7 +495,41 @@ public class CoreApi {
                 if (!permissions.contains(playerPermissionsResult.getString(1)))
                     permissions.add(playerPermissionsResult.getString(1));
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return permissions;
+    }
 
+    /**
+     * Gets all permissions belonging to rank specifically
+     * @param rankId The id of the rank
+     * @return A List of Strings corresponding to the ranks permissions.g
+     */
+    public List<String> getRankPermissions(int rankId) {
+        List<String> permissions = new ArrayList<>();
+        try {
+            PreparedStatement rankPermissionsStatement = sql.getConnection().prepareStatement("SELECT permission FROM rank_permissions WHERE rank=?");
+            rankPermissionsStatement.setInt(1, rankId);
+            ResultSet rankPermissionsResult = rankPermissionsStatement.executeQuery();
+            while (rankPermissionsResult.next()) {
+                if (!permissions.contains(rankPermissionsResult.getString(1)))
+                    permissions.add(rankPermissionsResult.getString(1));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return permissions;
+    }
+
+    /**
+     * Gets all ranks of a player
+     * @param playerId The players id
+     * @return A List of Ints corresponding to the rank ids.
+     */
+    public List<Integer> getPlayerRanks(int playerId) {
+        List<Integer> ranks = new ArrayList<>();
+        try {
             PreparedStatement userRanksIdStatement = sql.getConnection().prepareStatement("SELECT rank FROM player_ranks WHERE player=?");
 
             userRanksIdStatement.setInt(1, playerId);
@@ -393,23 +537,39 @@ public class CoreApi {
             ResultSet userRanksIdResult = userRanksIdStatement.executeQuery();
 
             while (userRanksIdResult.next()) {
-                PreparedStatement rankPermissionsStatement = sql.getConnection().prepareStatement("SELECT permission FROM rank_permissions WHERE rank=?");
-                rankPermissionsStatement.setInt(1, userRanksIdResult.getInt(1));
-                ResultSet rankPermissionsResult = rankPermissionsStatement.executeQuery();
-                while (rankPermissionsResult.next()) {
-                    if (!permissions.contains(rankPermissionsResult.getString(1)))
-                        permissions.add(rankPermissionsResult.getString(1));
-                }
+                ranks.add(userRanksIdResult.getInt(1));
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return ranks;
+    }
+
+    /**
+     * Gets all Permissions a player has acces to. Permissions will not be resulted twice.
+     * @param uuid The uuid of the player
+     * @return A List of Strings corresponding to the permissions.
+     */
+    public List<String> getPlayerPermissions(String uuid) {
+        int playerId = getPlayerId(uuid);
+
+        List<String> permissions = getPlayerOnlyPermissions(playerId);
+
+        getPlayerRanks(playerId).forEach((rank) -> {
+            getRankPermissions(rank).forEach((permission) -> {
+                if (!permissions.contains(permission))
+                    permissions.add(permission);
+            });
+        });
 
         return permissions;
     }
 
+    /**
+     * Gets a chat prefix of a plugin.
+     * @param plugin The plugin string id
+     * @return THe plugin prefix
+     */
     private String getPluginPrefix(String plugin) {
         try {
             if (plugin == null)

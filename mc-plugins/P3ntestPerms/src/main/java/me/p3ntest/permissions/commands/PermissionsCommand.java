@@ -14,6 +14,32 @@ public class PermissionsCommand implements CommandExecutor {
             CoreApi.getInstance().displayMessage((Player) sender, "nopermission", null);
             return true;
         }
+
+        if (args.length == 0) {
+            CoreApi.getInstance().displayMessage((Player) sender, "permission.nosubcommand", null);
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("user")) {
+            if (args.length == 1) {
+                CoreApi.getInstance().displayMessage((Player) sender, "permission.no-user", null);
+                return true;
+            }
+
+            int playerId = CoreApi.getInstance().getPlayerIdFromName(args[1]);
+
+            if (playerId == -1) {
+                CoreApi.getInstance().displayMessage((Player) sender, "permission.player-not-found", null);
+                return true;
+            }
+
+            if (args.length == 2) {
+                CoreApi.getInstance().displayMessage((Player) sender, "permission.display-permissions-from-user", null);
+                CoreApi.getInstance().getper
+                return true;
+            }
+        }
+
         return false;
     }
 }
