@@ -24,6 +24,7 @@ public abstract class IslandMembers {
         }
 
         int playerId = CoreApi.getInstance().getPlayerId(player.getUniqueId().toString());
+        String playerName = CoreApi.getInstance().getPlayerNameFromId(playerId);
         String playerToAddName = CoreApi.getInstance().getCorrectPlayerName(args[1]);
         String playerToAddUuid = CoreApi.getInstance().getUuidFromPlayerId(playerToAddId);
         Player playerToAdd = Bukkit.getPlayer(UUID.fromString(playerToAddUuid));
@@ -32,42 +33,55 @@ public abstract class IslandMembers {
             case "add":
                 IslandCreator.setPlayerRank(playerId, playerToAddId, "add");
                 CoreApi.getInstance().displayMessage(player, "skyblock.island.add.other.done", "skyblock", playerToAddName);
-                if (playerToAdd != null) {
-                    CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.add.self.done", "skyblock");
-                }
+                if (playerToAdd != null)
+                    CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.add.self.done", "skyblock", playerName);
                 return true;
             case "promote":
                 switch (IslandCreator.getPlayerRank(playerId, playerToAddId)){
+                    case "":
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.promote.other.ad-first", "skyblock", playerName);
+                        break;
                     case "add":
                         IslandCreator.setPlayerRank(playerId, playerToAddId, "trust");
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.promote.other.trust.done", "skyblock", playerToAddName);
+                        if (playerToAdd != null)
+                            CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.promote.self.trust.done", "skyblock", playerName);
                         break;
                     case "trust":
                         IslandCreator.setPlayerRank(playerId, playerToAddId, "mod");
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.promote.other.mod.done", "skyblock", playerToAddName);
+                        if (playerToAdd != null)
+                            CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.promote.self.mod.done", "skyblock", playerName);
                         break;
                 }
                 CoreApi.getInstance().displayMessage(player, "skyblock.island.promote.other.done", "skyblock", playerToAddName);
-                if (playerToAdd != null) {
-                    CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.promote.self.done", "skyblock", playerToAddName, IslandCreator.getPlayerRank(playerId, playerToAddId));
-                }
+                if (playerToAdd != null)
+                    CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.promote.self.done", "skyblock", playerName);
                 return true;
             case "demote":
                 switch (IslandCreator.getPlayerRank(playerId, playerToAddId)){
                     case "add":
                         IslandCreator.setPlayerRank(playerId, playerToAddId, "");
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.remove.other.done", "skyblock", playerToAddName);
+                        if (playerToAdd != null)
+                            CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.removee.self.done", "skyblock",);
                         break;
                     case "trust":
                         IslandCreator.setPlayerRank(playerId, playerToAddId, "add");
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.demote.other.done", "skyblock", playerToAddName);
+                        if (playerToAdd != null)
+                            CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.demote.self.done", "skyblock", playerToAddName, IslandCreator.getPlayerRank(playerId, playerToAddId));
                         break;
                     case "mod":
                         IslandCreator.setPlayerRank(playerId, playerToAddId, "trust");
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.demote.other.done", "skyblock", playerToAddName);
+                        if (playerToAdd != null)
+                            CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.demote.self.done", "skyblock", playerToAddName, IslandCreator.getPlayerRank(playerId, playerToAddId));
                         break;
-                }
-                CoreApi.getInstance().displayMessage(player, "skyblock.island.demote.other.done", "skyblock", playerToAddName);
-                if (playerToAdd != null) {
-                    CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.demote.self.done", "skyblock", playerToAddName, IslandCreator.getPlayerRank(playerId, playerToAddId));
+                    case "":
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.demote.other.done", "skyblock", playerToAddName);
                 }
                 return true;
-
         }
         return true;
     }
