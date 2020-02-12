@@ -1,5 +1,6 @@
 package de.razey.mc.skyblock;
 
+import de.razey.mc.skyblock.commands.SkyBlockIsTpCommand;
 import de.razey.mc.skyblock.commands.SkyblockBalanceCommand;
 import de.razey.mc.skyblock.commands.SkyblockIslandCommand;
 import de.razey.mc.skyblock.events.SkyblockBlockChangeEvent;
@@ -28,6 +29,7 @@ public class Main extends JavaPlugin {
 
         this.getCommand("island").setExecutor(new SkyblockIslandCommand());
         this.getCommand("balance").setExecutor(new SkyblockBalanceCommand());
+        this.getCommand("istp").setExecutor(new SkyBlockIsTpCommand());
 
         this.getServer().getPluginManager().registerEvents(new SkyblockPlayerInteractEvent(), this);
         this.getServer().getPluginManager().registerEvents(new SkyblockBlockChangeEvent(), this);
