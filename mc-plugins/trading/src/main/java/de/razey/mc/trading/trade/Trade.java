@@ -2,6 +2,7 @@ package de.razey.mc.trading.trade;
 
 import de.razey.mc.core.api.CoreApi;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -17,26 +18,26 @@ public class Trade {
     Inventory inventory1;
     Inventory inventory2;
 
-    static ItemStack blackGlass = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, (byte) 15);
+    static ItemStack blackGlass = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 15);
     static {
         ItemMeta meta = blackGlass.getItemMeta();
-        meta.setDisplayName("");
+        meta.setDisplayName("  ");
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
         blackGlass.setItemMeta(meta);
     }
 
-    static ItemStack accepted = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, (byte) 13);
+    static ItemStack accepted = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 13);
     static {
         ItemMeta meta = accepted.getItemMeta();
-        meta.setDisplayName("§aACCEPTED");
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&aACCEPTED"));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
         accepted.setItemMeta(meta);
     }
 
-    static ItemStack notAccepted = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, (byte) 14);
+    static ItemStack notAccepted = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 14);
     static {
         ItemMeta meta = notAccepted.getItemMeta();
-        meta.setDisplayName("§cNOT ACCEPTED");
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&cNOT ACCEPTED"));
         meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_DESTROYS, ItemFlag.HIDE_POTION_EFFECTS, ItemFlag.HIDE_UNBREAKABLE);
         notAccepted.setItemMeta(meta);
     }
@@ -83,12 +84,12 @@ public class Trade {
         this.p1 = p1;
         this.p2 = p2;
 
-        inventory1 = Bukkit.createInventory(null, 45, "Trade mit " + p2.getName());
+        inventory1 = Bukkit.createInventory(null, 54, "Trade mit " + p2.getName());
         setupInventory(inventory1);
         setAcceptedInInventory(inventory1, TradeSide.SELF, false);
         setAcceptedInInventory(inventory1, TradeSide.OTHER, false);
 
-        inventory2 = Bukkit.createInventory(null, 45, "Trade mit " + p1.getName());
+        inventory2 = Bukkit.createInventory(null, 54, "Trade mit " + p1.getName());
         setupInventory(inventory2);
         setAcceptedInInventory(inventory2, TradeSide.SELF, false);
         setAcceptedInInventory(inventory2, TradeSide.OTHER, false);
