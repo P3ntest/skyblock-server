@@ -1,0 +1,9 @@
+name: Trading
+version: 1.0
+main: de.razey.mc.trading.Main
+commands:
+  trade:
+    aliases:
+      - trading
+      - tr
+      - trpl

@@ -1,4 +1,4 @@
-package de.raey.mc.trading.trade;
+package de.razey.mc.trading.trade;
 
 import org.bukkit.entity.Player;
 
@@ -10,7 +10,7 @@ public abstract class TradingInventoryManager {
 
     public static List<Trade> trades = new ArrayList<>();
 
-    public static HashMap<Player, Player> tradeRequests;
+    public static HashMap<Player, Player> tradeRequests = new HashMap<>();
 
     public static Trade getTradePlayerIsIn(Player p) {
         for (Trade trade : trades) {
