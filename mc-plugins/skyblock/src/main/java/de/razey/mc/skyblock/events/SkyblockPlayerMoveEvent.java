@@ -9,8 +9,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 public class SkyblockPlayerMoveEvent implements Listener {
 
-
-
     @EventHandler
     public void onPlayerMove(PlayerMoveEvent e) {
         Player p = e.getPlayer();
