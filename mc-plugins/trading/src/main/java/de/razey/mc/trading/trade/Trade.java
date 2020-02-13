@@ -1,4 +1,4 @@
-package de.raey.mc.trading.trade;
+package de.razey.mc.trading.trade;
 
 import de.razey.mc.core.api.CoreApi;
 import org.bukkit.Bukkit;
@@ -70,6 +70,7 @@ public class Trade {
         p2.closeInventory();
         CoreApi.getInstance().displayMessage(p1, "trade.cancel", "trading");
         CoreApi.getInstance().displayMessage(p2, "trade.cancel", "trading");
+        TradingInventoryManager.trades.remove(this);
     }
 
     private void setupInventory(Inventory inv) {
@@ -91,6 +92,9 @@ public class Trade {
         setupInventory(inventory2);
         setAcceptedInInventory(inventory2, TradeSide.SELF, false);
         setAcceptedInInventory(inventory2, TradeSide.OTHER, false);
+
+        CoreApi.getInstance().displayMessage(p1, "trade.start", "trading", p2.getName());
+        CoreApi.getInstance().displayMessage(p2, "trade.start", "trading", p1.getName());
 
         p1.openInventory(inventory1);
         p2.openInventory(inventory2);

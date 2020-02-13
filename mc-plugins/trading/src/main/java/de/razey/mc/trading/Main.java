@@ -1,7 +1,7 @@
-package de.raey.mc.trading;
+package de.razey.mc.trading;
 
-import de.raey.mc.trading.commands.TradingCommand;
-import de.raey.mc.trading.events.PlayerInventoryEvents;
+import de.razey.mc.trading.commands.TradingCommand;
+import de.razey.mc.trading.events.PlayerInventoryEvents;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin {

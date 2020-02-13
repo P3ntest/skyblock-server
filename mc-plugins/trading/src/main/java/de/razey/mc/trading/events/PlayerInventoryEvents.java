@@ -1,6 +1,6 @@
-package de.raey.mc.trading.events;
+package de.razey.mc.trading.events;
 
-import de.raey.mc.trading.trade.TradingInventoryManager;
+import de.razey.mc.trading.trade.TradingInventoryManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
