@@ -17,7 +17,7 @@ public class Trade {
     Inventory inventory1;
     Inventory inventory2;
 
-    static ItemStack blackGlass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+    static ItemStack blackGlass = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, (byte) 15);
     static {
         ItemMeta meta = blackGlass.getItemMeta();
         meta.setDisplayName("");
@@ -25,7 +25,7 @@ public class Trade {
         blackGlass.setItemMeta(meta);
     }
 
-    static ItemStack accepted = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
+    static ItemStack accepted = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, (byte) 13);
     static {
         ItemMeta meta = accepted.getItemMeta();
         meta.setDisplayName("§aACCEPTED");
@@ -33,7 +33,7 @@ public class Trade {
         accepted.setItemMeta(meta);
     }
 
-    static ItemStack notAccepted = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+    static ItemStack notAccepted = new ItemStack(Material.LEGACY_STAINED_GLASS_PANE, (byte) 14);
     static {
         ItemMeta meta = notAccepted.getItemMeta();
         meta.setDisplayName("§cNOT ACCEPTED");

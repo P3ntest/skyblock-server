@@ -81,6 +81,8 @@ public class TradingCommand implements CommandExecutor {
 
             CoreApi.getInstance().displayMessage(toRequest, "trading.request.self", "trading", player.getName());
             CoreApi.getInstance().displayMessage(player, "trading.request.other", "trading", toRequest.getName());
+
+            return true;
         }
 
         if (args[0].equalsIgnoreCase("accept")) {

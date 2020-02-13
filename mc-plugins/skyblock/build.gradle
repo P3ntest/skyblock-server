@@ -19,7 +19,7 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
     compileOnly 'de.razey:coreapi:1.0'
-    compileOnly 'com.destroystokyo.paper:paper-api:1.15.2-R0.1-SNAPSHOT'
+    compileOnly 'com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT'
     compile 'com.boydti:fawe-api:latest'
     compile 'com.sk89q.worldedit:worldedit-bukkit:6.1.1-SNAPSHOT'
 }
