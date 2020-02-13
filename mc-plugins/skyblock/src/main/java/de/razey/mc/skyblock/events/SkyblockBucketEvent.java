@@ -10,8 +10,13 @@ import org.bukkit.event.player.PlayerBucketFillEvent;
 public class SkyblockBucketEvent implements Listener {
 
     @EventHandler
-    public void onBucket(PlayerBucketEvent e) {
-        e.setCancelled(ActionChecker.mayPerform(e.getPlayer(), e.getBlockClicked().getLocation()));
+    public void onBucket(PlayerBucketFillEvent e) {
+        e.setCancelled(!ActionChecker.mayPerform(e.getPlayer(), e.getBlockClicked().getLocation()));
+    }
+
+    @EventHandler
+    public void onBucket(PlayerBucketEmptyEvent e) {
+        e.setCancelled(!ActionChecker.mayPerform(e.getPlayer(), e.getBlockClicked().getLocation()));
     }
 
 }

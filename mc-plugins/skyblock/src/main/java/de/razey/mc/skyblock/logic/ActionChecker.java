@@ -19,21 +19,21 @@ public abstract class ActionChecker {
             return false;
         }
         Block sign = null;
-        if (loc.getBlock().getRelative(BlockFace.NORTH).getType() == Material.WALL_SIGN) {
+        if (loc.getBlock().getRelative(BlockFace.NORTH).getType() == Material.valueOf("WALL_SIGN")) {
             sign = loc.getBlock().getRelative(BlockFace.NORTH);
         }
-        if (loc.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.WALL_SIGN) {
+        if (loc.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.valueOf("WALL_SIGN")) {
             sign = loc.getBlock().getRelative(BlockFace.SOUTH);
         }
-        if (loc.getBlock().getRelative(BlockFace.WEST).getType() == Material.WALL_SIGN) {
+        if (loc.getBlock().getRelative(BlockFace.WEST).getType() == Material.valueOf("WALL_SIGN")) {
             sign = loc.getBlock().getRelative(BlockFace.WEST);
         }
-        if (loc.getBlock().getRelative(BlockFace.EAST).getType() == Material.WALL_SIGN) {
+        if (loc.getBlock().getRelative(BlockFace.EAST).getType() == Material.valueOf("WALL_SIGN")) {
             sign = loc.getBlock().getRelative(BlockFace.EAST);
         }
 
         if (sign != null) {
-            Sign aSign = (Sign) sign;
+            Sign aSign = (Sign) sign.getState();
 
             int island = IslandCreator.getIslandOfLocation(loc);
             if (island == -1)
