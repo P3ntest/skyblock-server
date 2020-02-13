@@ -39,7 +39,7 @@ public abstract class IslandMembers {
             case "promote":
                 switch (IslandCreator.getPlayerRank(playerId, playerToAddId)){
                     case "":
-                        CoreApi.getInstance().displayMessage(player, "skyblock.island.promote.other.ad-first", "skyblock", playerName);
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.promote.other.not-added", "skyblock", playerToAddName);
                         break;
                     case "add":
                         IslandCreator.setPlayerRank(playerId, playerToAddId, "trust");
@@ -53,15 +53,15 @@ public abstract class IslandMembers {
                         if (playerToAdd != null)
                             CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.promote.self.mod.done", "skyblock", playerName);
                         break;
+                    case "mod":
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.promote.other.max", "skyblock", playerToAddName);
+                        break;
                 }
                 return true;
             case "demote":
                 switch (IslandCreator.getPlayerRank(playerId, playerToAddId)){
                     case "add":
-                        IslandCreator.setPlayerRank(playerId, playerToAddId, "");
-                        CoreApi.getInstance().displayMessage(player, "skyblock.island.remove.other.done", "skyblock", playerToAddName);
-                        if (playerToAdd != null)
-                            CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.remove.self.done", "skyblock");
+                        CoreApi.getInstance().displayMessage(player, "skyblock.island.demote.other.min", "skyblock");
                         break;
                     case "trust":
                         IslandCreator.setPlayerRank(playerId, playerToAddId, "add");
@@ -79,6 +79,12 @@ public abstract class IslandMembers {
                         CoreApi.getInstance().displayMessage(player, "skyblock.island.demote.other.no-rank", "skyblock", playerToAddName);
                 }
                 return true;
+            case "remove":
+                IslandCreator.setPlayerRank(playerId, playerToAddId, "");
+                CoreApi.getInstance().displayMessage(player, "skyblock.island.remove.other.done", "skyblock", playerToAddName);
+                if (playerToAdd != null)
+                    CoreApi.getInstance().displayMessage(playerToAdd, "skyblock.island.remove.self.done", "skyblock", playerName);
+                break;
         }
         return true;
     }

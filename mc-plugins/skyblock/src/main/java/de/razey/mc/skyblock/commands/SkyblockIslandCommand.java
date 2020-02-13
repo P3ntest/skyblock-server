@@ -3,13 +3,16 @@ package de.razey.mc.skyblock.commands;
 import de.razey.mc.core.api.CoreApi;
 import de.razey.mc.skyblock.Main;
 import de.razey.mc.skyblock.commands.subcommands.IslandMembers;
+import de.razey.mc.skyblock.commands.subcommands.IslandTeleport;
 import de.razey.mc.skyblock.schematic.IslandCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.hamcrest.core.Is;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 public class SkyblockIslandCommand implements CommandExecutor {
@@ -63,6 +66,13 @@ public class SkyblockIslandCommand implements CommandExecutor {
 
                 IslandCreator.setIslandSpawn(IslandCreator.getIslandOfLocation(player.getLocation()), player.getLocation());
                 CoreApi.getInstance().displayMessage(player, "skyblock.island.sethome.done", "skyblock");
+                return true;
+            }
+
+            if (args[0].equalsIgnoreCase("tp")
+                    || args[0].equalsIgnoreCase("teleport")
+                    || args[0].equalsIgnoreCase("go")) {
+                IslandTeleport.isTp(sender, Arrays.copyOfRange(args, 1, args.length - 2));
                 return true;
             }
 

@@ -703,7 +703,8 @@ public class CoreApi {
     }
 
     public int getSkyblockXpNeededForLevelUp(int currentLevel) {
-        return 100 * ((int) Math.pow(2, currentLevel));
+        int x = currentLevel + 1;
+        return x + 100 + (int) Math.pow(4000 * (x - 2), 0.5);
     }
 
     public void setSkyblockXpForPlayerId(int playerId, int xp) {
