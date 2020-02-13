@@ -46,12 +46,11 @@ public abstract class IslandTeleport {
                 return true;
             }
 
-            player.teleport(IslandCreator.getIslandSpawn(destination));
-
-            CoreApi.getInstance().displayMessage(player, "skyblock.istp.done", "skyblock");
-            return true;
-
         }
+
+        player.teleport(IslandCreator.getIslandSpawn(destination));
+
+        CoreApi.getInstance().displayMessage(player, "skyblock.istp.done", "skyblock");
         return true;
     }
 

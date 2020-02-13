@@ -73,6 +73,7 @@ public class SkyblockIslandCommand implements CommandExecutor {
                     || args[0].equalsIgnoreCase("teleport")
                     || args[0].equalsIgnoreCase("go")) {
                 IslandTeleport.isTp(sender, Arrays.copyOfRange(args, 1, args.length - 2));
+                return true;
             }
 
             if (args[0].equalsIgnoreCase("add")

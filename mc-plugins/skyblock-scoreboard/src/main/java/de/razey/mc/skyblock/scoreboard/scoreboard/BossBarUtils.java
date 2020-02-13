@@ -27,8 +27,6 @@ public abstract class BossBarUtils {
 
     public static void increasePlayer(Player p) {
         currentXp.put(p, currentXp.get(p) + 1);
-        System.out.println(currentXp.get(p));
-        System.out.println(xpNeededForLevelUp.get(p));
         playerBossBars.get(p).setProgress((float) currentXp.get(p) / (float) xpNeededForLevelUp.get(p));
     }
 
