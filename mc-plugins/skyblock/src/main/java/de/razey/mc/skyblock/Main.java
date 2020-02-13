@@ -3,10 +3,7 @@ package de.razey.mc.skyblock;
 import de.razey.mc.skyblock.commands.SkyBlockIsTpCommand;
 import de.razey.mc.skyblock.commands.SkyblockBalanceCommand;
 import de.razey.mc.skyblock.commands.SkyblockIslandCommand;
-import de.razey.mc.skyblock.events.SkyblockBlockChangeEvent;
-import de.razey.mc.skyblock.events.SkyblockBucketEvent;
-import de.razey.mc.skyblock.events.SkyblockPlayerInteractEvent;
-import de.razey.mc.skyblock.events.SkyblockPlayerMoveEvent;
+import de.razey.mc.skyblock.events.*;
 import org.bukkit.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -37,6 +34,7 @@ public class Main extends JavaPlugin {
         this.getServer().getPluginManager().registerEvents(new SkyblockBlockChangeEvent(), this);
         this.getServer().getPluginManager().registerEvents(new SkyblockBucketEvent(), this);
         this.getServer().getPluginManager().registerEvents(new SkyblockPlayerMoveEvent(), this);
+        this.getServer().getPluginManager().registerEvents(new SkyblockEntityDamageEvent(), this);
 
         System.out.println("Enabled Skyblock");
     }
