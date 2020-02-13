@@ -31,15 +31,12 @@ public class SkyblockPlayerInteractEvent implements Listener {
             switch (event.getClickedBlock().getType()) {
                 case ITEM_FRAME:
                 case LEVER:
-                case WOOD_BUTTON:
                 case STONE_BUTTON:
-                case WOODEN_DOOR:
-                case WOOD_DOOR:
-                case TRAP_DOOR:
                 case TRAPPED_CHEST:
-                case CHEST:
                     event.setCancelled(!ActionChecker.mayPerform(event.getPlayer(), event.getClickedBlock().getLocation()));
                     break;
+                case CHEST:
+                    event.setCancelled(!ActionChecker.mayOpenChest(event.getPlayer(), event.getClickedBlock().getLocation()));
             }
         }
     }
