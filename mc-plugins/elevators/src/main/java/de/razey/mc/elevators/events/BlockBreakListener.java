@@ -13,7 +13,7 @@ public class BlockBreakListener implements Listener {
     @EventHandler
     public void onBlockBreak(BlockBreakEvent e) {
         Player p = e.getPlayer();
-        if(true) {//Die NBT abfrage hinzufügen
+        if(e.getBlock().getBlockData().getMaterial() == Material.DAYLIGHT_DETECTOR) {
             e.setCancelled(true);
             p.getInventory().addItem(new ItemBuilder(Material.DAYLIGHT_DETECTOR).setDisplayName(data.elevatorName).build());
         }
