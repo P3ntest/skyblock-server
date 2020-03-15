@@ -22,7 +22,8 @@ public class TradingCommand implements CommandExecutor {
 
         if (args.length == 0) {
             if (TradingInventoryManager.tradeRequests.containsKey(player)) {
-                CoreApi.getInstance().displayMessage(player, "trading.self.info-trade", "trading", TradingInventoryManager.tradeRequests.get(player).getName());
+                CoreApi.getInstance().displayMessage(player, "trading.self.info-trade", "trading",
+                        TradingInventoryManager.tradeRequests.get(player).getName());
                 return true;
             } else {
                 CoreApi.getInstance().displayMessage(player, "trading.no-player", "trading");

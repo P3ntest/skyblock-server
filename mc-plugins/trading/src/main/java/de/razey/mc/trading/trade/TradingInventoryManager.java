@@ -10,7 +10,7 @@ public abstract class TradingInventoryManager {
 
     public static List<Trade> trades = new ArrayList<>();
 
-    public static HashMap<Player, Player> tradeRequests = new HashMap<>();
+    public static HashMap<Player, Player> tradeRequests = new HashMap<>(); //Key:Requester - Value:Requested
 
     public static Trade getTradePlayerIsIn(Player p) {
         for (Trade trade : trades) {
