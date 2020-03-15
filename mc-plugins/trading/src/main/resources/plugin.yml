@@ -1,6 +1,7 @@
 name: Trading
 version: 1.0
 main: de.razey.mc.trading.Main
+author: P3ntest
 commands:
   trade:
     aliases:
