@@ -1,0 +1,5 @@
+name: CustomItems
+version: 1.0
+main: de.razey.customitems.Main
+author: P3ntest
+commands:
