@@ -18,3 +18,5 @@ commands:
       - tpis
       - teleportis
       - isgo
+  spawn:
+  isadmin:

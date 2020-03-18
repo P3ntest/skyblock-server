@@ -35,24 +35,24 @@ public class SkyblockIslandCommand implements CommandExecutor {
         }
 
         if (args.length > 0) {
-            if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("del")) {
-                if (!IslandCreator.isOnOwnIsland(player)) {
-                    CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.wrong-island", "skyblock");
-                    return true;
-                }
-
-                if (args.length == 1) {
-                    CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.confirm", "skyblock");
-                    return true;
-                }
-                if (args[1].equalsIgnoreCase(   "confirm")) {
-                    System.out.println(Main.worldSpawn());
-                    player.teleport(Main.worldSpawn());
-                    IslandCreator.eraseIsland(player);
-                    CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.done", "skyblock");
-                    return true;
-                }
-            }
+//            if (args[0].equalsIgnoreCase("delete") || args[0].equalsIgnoreCase("del")) {
+//                if (!IslandCreator.isOnOwnIsland(player)) {
+//                    CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.wrong-island", "skyblock");
+//                    return true;
+//                }
+//
+//                if (args.length == 1) {
+//                    CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.confirm", "skyblock");
+//                    return true;
+//                }
+//                if (args[1].equalsIgnoreCase(   "confirm")) {
+//                    System.out.println(Main.worldSpawn());
+//                    player.teleport(Main.worldSpawn());
+//                    IslandCreator.eraseIsland(player);
+//                    CoreApi.getInstance().displayMessage(player, "skyblock.island.delete.done", "skyblock");
+//                    return true;
+//                }
+//            }
 
             if (args[0].equalsIgnoreCase("sethome")) {
                 if (!player.getWorld().equals(Bukkit.getWorld("islands"))) {

@@ -12,9 +12,12 @@ commands:
     aliases: [is, skyblock, skyisland, si]
   balance:
     aliases: [bal, money, geld]
+  pay:
   istp:
     aliases:
       - islandtp
       - tpis
       - teleportis
       - isgo
+  spawn:
+  isadmin:

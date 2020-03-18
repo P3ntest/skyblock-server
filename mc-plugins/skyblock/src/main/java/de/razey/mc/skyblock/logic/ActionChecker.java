@@ -1,6 +1,7 @@
 package de.razey.mc.skyblock.logic;
 
 import de.razey.mc.core.api.CoreApi;
+import de.razey.mc.skyblock.commands.SkyblockIsAdminCommand;
 import de.razey.mc.skyblock.schematic.IslandCreator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -15,6 +16,8 @@ import org.hamcrest.core.Is;
 public abstract class ActionChecker {
 
     public static boolean mayOpenChest(Player player, Location loc) {
+        if (SkyblockIsAdminCommand.admin.contains(player))
+            return true;
         if (player.getWorld() != Bukkit.getWorld("islands")) {
             return false;
         }
@@ -82,6 +85,8 @@ public abstract class ActionChecker {
     }
 
     public static boolean mayPerform(Player player, Location targetBlock) {
+        if (SkyblockIsAdminCommand.admin.contains(player))
+            return true;
         if (player.getWorld() != Bukkit.getWorld("islands")) {
             return false;
         }
