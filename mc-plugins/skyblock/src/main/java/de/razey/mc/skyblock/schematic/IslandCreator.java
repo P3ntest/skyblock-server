@@ -1,24 +1,39 @@
 package de.razey.mc.skyblock.schematic;
 
-import com.avaje.ebean.validation.NotNull;
-import com.boydti.fawe.util.EditSessionBuilder;
-import com.google.gson.internal.$Gson$Preconditions;
+import com.sk89q.jchronic.handlers.SySmSdHandler;
 import com.sk89q.worldedit.EditSession;
-import com.sk89q.worldedit.Vector;
-import com.sk89q.worldedit.blocks.BaseBlock;
+import com.sk89q.worldedit.MaxChangedBlocksException;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.WorldEditException;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
-import com.sk89q.worldedit.extent.clipboard.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.Clipboard;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardReader;
+import com.sk89q.worldedit.function.operation.Operation;
+import com.sk89q.worldedit.function.operation.Operations;
+import com.sk89q.worldedit.internal.annotation.Selection;
+import com.sk89q.worldedit.math.BlockVector3;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
+import com.sk89q.worldedit.session.ClipboardHolder;
 import com.sk89q.worldedit.world.World;
+import com.sk89q.worldedit.world.block.BaseBlock;
+import com.sk89q.worldedit.world.block.BlockState;
+import com.sk89q.worldedit.world.block.BlockTypes;
 import de.razey.mc.core.api.CoreApi;
 import de.razey.mc.skyblock.Main;
+import de.razey.mc.skyblock.threads.RemoveIslandThread;
+import de.schlichtherle.key.passwd.swing.BasicInvalidKeyFeedback;
+import jdk.nashorn.internal.ir.Block;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Player;
 
+import javax.rmi.ssl.SslRMIClientSocketFactory;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -184,15 +199,30 @@ public abstract class IslandCreator {
     private static void spawnIsland(Location location) {
         File file = new File(Main._instance.getDataFolder() + "/island.schematic");
 
-        Vector position = new Vector(location.getBlockX(),location.getBlockY(), location.getBlockZ());
+        Clipboard clipboard = null;
 
-        World world = new BukkitWorld(Bukkit.getWorld("islands"));
-
-        try {
-            EditSession editSession = Objects.requireNonNull(ClipboardFormats.findByFile(file)).load(file).paste(world, position, false, false, null);
+        ClipboardFormat format = ClipboardFormats.findByFile(file);
+        try (ClipboardReader reader = format.getReader(new FileInputStream(file))) {
+             clipboard = reader.read();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        World world = new BukkitWorld(Bukkit.getWorld("islands"));
+
+        try (EditSession editSession = WorldEdit.getInstance().getEditSessionFactory().getEditSession(world, -1)) {
+            Operation operation = new ClipboardHolder(clipboard)
+                    .createPaste(editSession)
+                    .to(BlockVector3.at(location.getBlockX(),location.getBlockY(), location.getBlockZ()))
+                    .ignoreAirBlocks(true)
+                    .build();
+            Operations.complete(operation);
+        } catch (WorldEditException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Spawned island.");
     }
 
     public static int getIslandPosition(String uuid) {
@@ -245,26 +275,21 @@ public abstract class IslandCreator {
     }
 
     public static void eraseIsland(Player p) {
-        int position = -1;
-        position = getIslandPosition(p.getUniqueId().toString());
-
-        World world = new BukkitWorld(Bukkit.getWorld("islands"));
-        EditSession editSession = new EditSessionBuilder(world).fastmode(true).build();
-
-        Vector point1 = new Vector((position * islandPadding) - 251, 0, -251);
-        Vector point2 = new Vector((position * islandPadding) + 251, 255, 251);
-
-        Region region = new CuboidRegion(world, point1, point2);
-
-        editSession.setBlocks(region, new BaseBlock(0));
-
-        editSession.flushQueue();
-
         try {
-            removeIslandFromDataBase(position);
-        }catch (SQLException e) {
+            removeIslandFromDataBase(getIslandPosition(p.getUniqueId().toString()));
+        } catch (SQLException e) {
             e.printStackTrace();
         }
+        return;
+//        int position = -1;
+//        position = getIslandPosition(p.getUniqueId().toString());
+//
+//        RemoveIslandThread t = new RemoveIslandThread();
+//        t.position = position;
+//        t.world = Bukkit.getWorld("islands");
+//
+//        t.start();
+
     }
 
     private static void enterIslandToDatabase(Player player, Location location, int position) throws SQLException {

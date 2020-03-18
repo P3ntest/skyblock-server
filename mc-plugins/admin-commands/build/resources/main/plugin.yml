@@ -1,0 +1,16 @@
+name: AdminCommands
+author: P3ntest
+authors:
+  - P3ntest
+  - Razey
+  - Razey-Team
+version: 1.0
+depend: [ServerCore]
+main: de.razey.mc.admincommands.Main
+commands:
+  invsee:
+  c:
+    aliases:
+      - 1
+      - gm1
+      - creative
