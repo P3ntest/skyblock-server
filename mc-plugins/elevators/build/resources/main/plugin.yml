@@ -1,0 +1,7 @@
+  name: Elevators
+  main: de.razey.elevators.Main
+  version: 1.0
+  authors:
+    - Razey.de Team
+    - Hoppel
+    - P3ntest
