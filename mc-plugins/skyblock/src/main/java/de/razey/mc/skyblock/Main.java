@@ -1,7 +1,7 @@
 package de.razey.mc.skyblock;
 
 import de.razey.mc.skyblock.commands.*;
-import de.razey.mc.skyblock.commands.subcommands.SkyblockPayCommand;
+import de.razey.mc.skyblock.commands.SkyblockPayCommand;
 import de.razey.mc.skyblock.events.*;
 import de.razey.mc.skyblock.threads.IslandToRemove;
 import org.bukkit.*;

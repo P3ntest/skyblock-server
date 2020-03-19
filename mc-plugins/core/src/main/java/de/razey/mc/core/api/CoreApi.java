@@ -1,18 +1,20 @@
 package de.razey.mc.core.api;
 
-import com.google.gson.internal.bind.SqlDateTypeAdapter;
 import de.razey.mc.core.Main;
 import de.razey.mc.core.sql.CoreSql;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nullable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -315,7 +317,7 @@ public class CoreApi {
         enterPlayerToSkyblockStats(playerId);
         try {
             CoreApi.getInstance().getSql().updateStatement(
-                    "UPDATE UPDATE `skyblock_stats` SET `balance`=`balance`+" + addition + " WHERE player="+ playerId
+                    "UPDATE `skyblock_stats` SET `balance`=`balance`+" + addition + " WHERE player="+ playerId
             );
         } catch (SQLException e) {
             e.printStackTrace();
@@ -823,5 +825,20 @@ public class CoreApi {
 
     public UUID getUuidObjectFromUuid(String uuid) {
         return UUID.fromString(uuid);
+    }
+
+    public int getPlayerIdFromPlayer(Player player) { return getPlayerIdFromUuid(player.getUniqueId().toString()); }
+
+    private static HashMap<String, ItemStack> customItems = new HashMap<>();
+    public void addCustomItem(String index, ItemStack item) {
+        customItems.put(index, item);
+    }
+
+    public ItemStack getCustomItem(String index) {
+        return customItems.get(index);
+    }
+
+    public boolean existCustomItem(String index) {
+        return customItems.containsKey(index);
     }
 }

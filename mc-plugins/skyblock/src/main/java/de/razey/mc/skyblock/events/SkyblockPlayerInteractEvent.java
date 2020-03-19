@@ -25,19 +25,24 @@ public class SkyblockPlayerInteractEvent implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInteract(PlayerInteractEvent event)
     {
-        if(event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType().equals(Material.valueOf("SOIL")))
+        if(event.getAction() == Action.PHYSICAL && event.getClickedBlock().getType().equals(Material.valueOf("FARMLAND")))
             event.setCancelled(true);
 
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             switch (event.getClickedBlock().getType()) {
+                case CHEST:
+                    event.setCancelled(!ActionChecker.mayOpenChest(event.getPlayer(), event.getClickedBlock().getLocation()));
+                    break;
                 case ITEM_FRAME:
                 case LEVER:
                 case STONE_BUTTON:
+                case FURNACE:
+                case COMPOSTER:
                 case TRAPPED_CHEST:
+                case FLOWER_POT:
+                default:
                     event.setCancelled(!ActionChecker.mayPerform(event.getPlayer(), event.getClickedBlock().getLocation()));
                     break;
-                case CHEST:
-                    event.setCancelled(!ActionChecker.mayOpenChest(event.getPlayer(), event.getClickedBlock().getLocation()));
             }
         }
     }

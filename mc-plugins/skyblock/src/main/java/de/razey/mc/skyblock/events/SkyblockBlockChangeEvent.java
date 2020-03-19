@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -15,12 +16,12 @@ public class SkyblockBlockChangeEvent implements Listener {
 
 
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent e) {
         e.setCancelled(!ActionChecker.mayPerform(e.getPlayer(), e.getBlock().getLocation()));
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     public void onBlockPlace(BlockPlaceEvent e) {
         e.setCancelled(!ActionChecker.mayPerform(e.getPlayer(), e.getBlock().getLocation()));
     }

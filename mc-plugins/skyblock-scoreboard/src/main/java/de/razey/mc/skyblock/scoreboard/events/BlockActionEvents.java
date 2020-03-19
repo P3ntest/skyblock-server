@@ -36,13 +36,13 @@ public class BlockActionEvents implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockBreak(BlockBreakEvent e) {
         if (!e.isCancelled())
             grantXp(e.getPlayer(), 1);
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockPlace(BlockPlaceEvent e) {
         if (!e.isCancelled())
             grantXp(e.getPlayer(), 1);

@@ -1,0 +1,12 @@
+name: SkyblockQuests
+author: P3ntest
+version: 1.0
+depend: [ServerCore]
+main: de.razey.mc.skyblockquests.Main
+commands:
+  questworld:
+
+
+
+
+
