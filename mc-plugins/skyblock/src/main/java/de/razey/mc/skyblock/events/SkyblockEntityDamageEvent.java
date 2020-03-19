@@ -14,8 +14,6 @@ public class SkyblockEntityDamageEvent implements Listener {
             Player player = (Player) e.getEntity();
             if (e.getCause() == EntityDamageEvent.DamageCause.FALL && e.getDamage() >= player.getHealth()) {
                 e.setDamage(player.getHealth()-1);
-                //e.setCancelled(true);
-                //player.setHealth(1);
             }
         }
     }

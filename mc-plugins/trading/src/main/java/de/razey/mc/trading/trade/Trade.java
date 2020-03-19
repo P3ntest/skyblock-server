@@ -15,8 +15,11 @@ public class Trade {
     Player p1;
     Player p2;
 
-    Inventory inventory1;
-    Inventory inventory2;
+    boolean p1accept;
+    boolean p2accept;
+
+    Inventory tradeinv1;
+    Inventory tradeinv2;
 
     static ItemStack blackGlass = new ItemStack(Material.BLACK_STAINED_GLASS_PANE, 1);
     static {
@@ -52,6 +55,13 @@ public class Trade {
         return false;
     }
 
+    public static boolean isInvTradeInv(Inventory inv){
+        if (TradingInventoryManager.trades.contains(inv)){
+            return true;
+        }
+        return false;
+    }
+
     enum TradeSide {
         SELF,
         OTHER;
@@ -64,6 +74,33 @@ public class Trade {
         for (int i = start; i < max; i++) {
             inv.setItem(i, accepted ? this.accepted : notAccepted);
         }
+    }
+
+    private void setAcceptedInInventory() {
+        for (int i = 0; i < 4; i++) {
+            tradeinv1.setItem(i, p1accept ? this.accepted : notAccepted);
+        }
+        for (int i = 0; i < 4; i++) {
+            tradeinv2.setItem(i, p2accept ? this.accepted : notAccepted);
+        }
+    }
+
+    public void accept(Player p){
+        if(p == p1){
+            p1accept = true;
+        }
+        else if(p == p2){
+            p2accept = true;
+        }
+        setAcceptedInInventory();
+        if (p1accept && p2accept) this.TradFinish();
+    }
+
+    private void TradFinish(){
+        p1.closeInventory();
+        p2.closeInventory();
+        CoreApi.getInstance().displayMessage(p1, "trade.successful", "trading");
+        CoreApi.getInstance().displayMessage(p2, "trade.successful", "trading");
     }
 
     public void tradeForceEnd() {
@@ -83,22 +120,43 @@ public class Trade {
     public Trade(Player p1, Player p2) {
         this.p1 = p1;
         this.p2 = p2;
+        this.p1accept = false;
+        this.p2accept = false;
 
-        inventory1 = Bukkit.createInventory(null, 54, "Trade mit " + p2.getName());
-        setupInventory(inventory1);
-        setAcceptedInInventory(inventory1, TradeSide.SELF, false);
-        setAcceptedInInventory(inventory1, TradeSide.OTHER, false);
+        tradeinv1 = Bukkit.createInventory(null, 54, "Trade mit " + p2.getName());
+        setupInventory(tradeinv1);
 
-        inventory2 = Bukkit.createInventory(null, 54, "Trade mit " + p1.getName());
-        setupInventory(inventory2);
-        setAcceptedInInventory(inventory2, TradeSide.SELF, false);
-        setAcceptedInInventory(inventory2, TradeSide.OTHER, false);
+        tradeinv2 = Bukkit.createInventory(null, 54, "Trade mit " + p1.getName());
+        setupInventory(tradeinv2);
+        setAcceptedInInventory();
 
         CoreApi.getInstance().displayMessage(p1, "trade.start", "trading", p2.getName());
         CoreApi.getInstance().displayMessage(p2, "trade.start", "trading", p1.getName());
 
-        p1.openInventory(inventory1);
-        p2.openInventory(inventory2);
+        p1.openInventory(tradeinv1);
+        p2.openInventory(tradeinv2);
+
+
+    }
+
+    public static boolean notAllowedToClick(int tile){
+        for (int i = 4; i < 50; i = i + 9) {
+            for (int ii = i; ii < i + 4; i++)
+                if(tile <= 9 || tile == ii){
+                    return true;
+                }
+        }
+        return false;
+    }
+
+    public static Trade getTradeFromPlayer(Player p){
+        int i = 0;
+        while (true){
+            i++;
+            if(TradingInventoryManager.trades.get(i).p1 == p || TradingInventoryManager.trades.get(i).p2 == p){
+                return TradingInventoryManager.trades.get(i);
+            }
+        }
     }
 
 }

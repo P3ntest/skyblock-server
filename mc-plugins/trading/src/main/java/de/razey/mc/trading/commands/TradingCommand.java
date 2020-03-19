@@ -53,17 +53,18 @@ public class TradingCommand implements CommandExecutor {
                     CoreApi.getInstance().displayMessage(player, "trading.no-trade-to-accept", "trading");
                     return true;
                 }
-                if (allTradeRequestsFromPlayer.size() == 1) {
+                else if (allTradeRequestsFromPlayer.size() == 1) {
                     TradingInventoryManager.trades.add(new Trade(player, allTradeRequestsFromPlayer.get(0)));
                     TradingInventoryManager.tradeRequests.remove(allTradeRequestsFromPlayer.get(0));
                     return true;
                 }
-
-                CoreApi.getInstance().displayMessage(player, "trading.accept.multiple", "trading");
-                for (Player p : allTradeRequestsFromPlayer) {
-                    CoreApi.getInstance().displayMessage(player, "trading.accept.multiple.item", "trading", p.getName());
+                else {
+                    CoreApi.getInstance().displayMessage(player, "trading.accept.multiple", "trading");
+                    for (Player p : allTradeRequestsFromPlayer) {
+                        CoreApi.getInstance().displayMessage(player, "trading.accept.multiple.item", "trading", p.getName());
+                    }
+                    return true;
                 }
-                return true;
             }
 
             if (TradingInventoryManager.tradeRequests.containsKey(player)) {
@@ -103,9 +104,7 @@ public class TradingCommand implements CommandExecutor {
             CoreApi.getInstance().displayMessage(player, "trading.accept.no-request-from-player", "trading", args[1]);
             return true;
         }
-
         CoreApi.getInstance().displayMessage(player, "trading.invalid-syntax", "trading");
-
         return false;
     }
 }
