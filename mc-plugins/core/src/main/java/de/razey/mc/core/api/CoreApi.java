@@ -38,7 +38,7 @@ public class CoreApi {
                     config.getString("database.password"),
                     config.getString("database.database"),
                     config.getInt("database.port"));
-            sql.connect();
+            sql.startupConnectionPool();
         }
     }
 
