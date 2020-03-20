@@ -21,17 +21,18 @@ public abstract class ActionChecker {
         if (player.getWorld() != Bukkit.getWorld("islands")) {
             return false;
         }
+
         Block sign = null;
-        if (loc.getBlock().getRelative(BlockFace.NORTH).getType() == Material.valueOf("WALL_SIGN")) {
+        if (loc.getBlock().getRelative(BlockFace.NORTH).getType().name().toLowerCase().contains("sign")) {
             sign = loc.getBlock().getRelative(BlockFace.NORTH);
         }
-        if (loc.getBlock().getRelative(BlockFace.SOUTH).getType() == Material.valueOf("WALL_SIGN")) {
+        if (loc.getBlock().getRelative(BlockFace.SOUTH).getType().name().toLowerCase().contains("sign")) {
             sign = loc.getBlock().getRelative(BlockFace.SOUTH);
         }
-        if (loc.getBlock().getRelative(BlockFace.WEST).getType() == Material.valueOf("WALL_SIGN")) {
+        if (loc.getBlock().getRelative(BlockFace.WEST).getType().name().toLowerCase().contains("sign")) {
             sign = loc.getBlock().getRelative(BlockFace.WEST);
         }
-        if (loc.getBlock().getRelative(BlockFace.EAST).getType() == Material.valueOf("WALL_SIGN")) {
+        if (loc.getBlock().getRelative(BlockFace.EAST).getType().name().toLowerCase().contains("sign")) {
             sign = loc.getBlock().getRelative(BlockFace.EAST);
         }
 

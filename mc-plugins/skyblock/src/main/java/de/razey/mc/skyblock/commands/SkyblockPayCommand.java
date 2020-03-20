@@ -46,6 +46,7 @@ public class SkyblockPayCommand implements CommandExecutor {
         if (senderMoney < toPay) {
             CoreApi.getInstance().displayMessage((Player) sender,
                     "skyblock.balance.pay.invalid-balance", "skyblock");
+            return true;
         }
 
         CoreApi.getInstance().modifySkyblockBalanceFromPlayerId(

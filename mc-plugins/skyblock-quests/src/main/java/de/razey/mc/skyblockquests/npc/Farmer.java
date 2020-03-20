@@ -47,6 +47,11 @@ public class Farmer implements VanillaEntityNPC {
     }
 
     @Override
+    public Villager.Type getVillagerType() {
+        return Villager.Type.SAVANNA;
+    }
+
+    @Override
     public Entity getSpawned() {
         return spawned;
     }
@@ -62,6 +67,7 @@ public class Farmer implements VanillaEntityNPC {
         }
         if (player.getInventory().contains(new ItemStack(Material.WHEAT, 64))) {
             player.getInventory().remove(new ItemStack(Material.WHEAT, 64));
+            player.getInventory().addItem(CoreApi.getInstance().getCustomItem("simplewateringcan"));
             CoreApi.getInstance().displayMessage(player, "npc.farmer.thanks", null);
             player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_TRADE, 10, 1);
             wheatCooldown.add(player);
@@ -81,7 +87,8 @@ public class Farmer implements VanillaEntityNPC {
 
     @Override
     public Location getLocation() {
-        Location location = new FirstQuestWorld().getSpawn();
+        Location location = new Location(new FirstQuestWorld().getSpawn().getWorld(),
+                -99.6, 64, -93.1, 163, 22);
         return location;
     }
 

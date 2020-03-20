@@ -1,14 +1,21 @@
 package de.razey.mc.skyblockquests.npc;
 
+import de.razey.mc.core.api.CoreApi;
+import de.razey.mc.skyblockquests.Main;
 import de.razey.mc.skyblockquests.world.FirstQuestWorld;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
+import org.bukkit.inventory.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OldMan01 implements VanillaEntityNPC {
+    private Entity spawned = null;
+
     @Override
     public String getNpcName() {
         return ChatColor.translateAlternateColorCodes('&', "&eAlter Mann &r&f(Klick mich!)");
@@ -25,25 +32,13 @@ public class OldMan01 implements VanillaEntityNPC {
     }
 
     @Override
-    public Villager.Type getVillagerType() {
-        return Villager.Type.JUNGLE;
-    }
-
-    @Override
     public boolean getCustomNameVisible() {
         return true;
     }
 
-    Entity spawned;
-
     @Override
     public void setSpawned(Entity spawned) {
         this.spawned = spawned;
-    }
-
-    @Override
-    public Entity getSpawned() {
-        return spawned;
     }
 
     @Override
@@ -52,13 +47,25 @@ public class OldMan01 implements VanillaEntityNPC {
     }
 
     @Override
-    public void clickedOn(Player player) {
+    public Villager.Type getVillagerType() {
+        return Villager.Type.JUNGLE;
+    }
 
+    @Override
+    public Entity getSpawned() {
+        return spawned;
+    }
+
+    @Override
+    public void clickedOn(Player player) {
+        CoreApi.getInstance().displayMessage(player, "npc.oldman.01.greet", null);
     }
 
     @Override
     public Location getLocation() {
-        return new Location(new FirstQuestWorld().getSpawn().getWorld(),  158.7f, 67.0625f, -91.980, 149, 0);
+        Location location = new Location(new FirstQuestWorld().getSpawn().getWorld(),
+                158.7, 67.0625, -91.980, 149, 0);
+        return location;
     }
 
     @Override

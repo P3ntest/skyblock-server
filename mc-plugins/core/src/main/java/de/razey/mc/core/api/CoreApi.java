@@ -629,6 +629,37 @@ public class CoreApi {
         return "";
     }
 
+    public void setMessage(String id, String message, String language) {
+        if (getMessage(id, language) != null) {
+            try {
+                PreparedStatement messageStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                        "DELETE FROM messages WHERE id=? AND language=?"
+                );
+
+                messageStatement.setString(1, id);
+                messageStatement.setString(2, language);
+
+                messageStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            PreparedStatement messageStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(
+                    "INSERT INTO `messages`(`id`, `message`, `language`) VALUES (?, ?, ?)"
+            );
+
+            messageStatement.setString(1, id);
+            messageStatement.setString(2, message);
+            messageStatement.setString(3, language);
+
+            messageStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getMessage(String message, String language) {
         try {
             PreparedStatement messageStatement = CoreApi.getInstance().getSql().getConnection().prepareStatement(

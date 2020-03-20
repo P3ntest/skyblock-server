@@ -2,8 +2,7 @@ package de.razey.customitems.events;
 
 import de.razey.customitems.item.BottomlessWaterbucket;
 import de.razey.customitems.item.SimpleWateringCan;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Ageable;
@@ -36,8 +35,9 @@ public class PlayerInteractEventListener implements Listener {
                                 getItemMeta().getItemFlags().contains(ItemFlag.HIDE_PLACED_ON)) {
                     if (event.getPlayer().getInventory().getItem(event.getHand()).
                             getItemMeta().getDisplayName().equalsIgnoreCase(new SimpleWateringCan().getDisplayName())) {
-                        if (onWateringCooldown.contains(event.getPlayer()))
-                            return;
+
+                        World world = event.getClickedBlock().getWorld();
+
                         Block currCheckBlock = event.getClickedBlock();
                         int farmlandLevel = -1;
                         for (int i = 0; i < 5; i++) {
@@ -50,7 +50,17 @@ public class PlayerInteractEventListener implements Listener {
 
                         Random random = new Random();
 
+
+
                         if (farmlandLevel != -1) {
+                            for (int particle = 0; particle < 15; particle++) {
+                                event.getPlayer().spawnParticle(Particle.WATER_SPLASH, new Location(world, event.getClickedBlock().getX() + random.nextInt(10) - 5, farmlandLevel + 1, event.getClickedBlock().getY() + random.nextInt(10) - 5), 2);
+                                event.getPlayer().playSound(event.getClickedBlock().getLocation(), Sound.ENTITY_BOAT_PADDLE_WATER, 10, 1);
+                            }
+
+                            if (onWateringCooldown.contains(event.getPlayer()))
+                                return;
+
                             onWateringCooldown.add(event.getPlayer());
                             for (int x = -2; x < 3; x++) {
                                 for (int y = -2; y < 3; y++) {
@@ -62,7 +72,7 @@ public class PlayerInteractEventListener implements Listener {
                                     if (cropLocation.getBlock() != null
                                             && cropLocation.getBlock().getBlockData() instanceof Ageable) {
 
-                                        if (random.nextDouble() < 0.02) {
+                                        if (random.nextDouble() < 0.16) {
                                             Ageable ageableBlockData = (Ageable) cropLocation.getBlock().getBlockData();
                                             ageableBlockData.setAge(Math.min(ageableBlockData.getMaximumAge(), ageableBlockData.getAge() + 1));
                                             cropLocation.getBlock().setBlockData(ageableBlockData);

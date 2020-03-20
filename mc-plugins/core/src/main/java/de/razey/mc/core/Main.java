@@ -1,6 +1,7 @@
 package de.razey.mc.core;
 
 import de.razey.mc.core.api.CoreApi;
+import de.razey.mc.core.command.CoreCommandExecutor;
 import de.razey.mc.core.events.CorePlayerDisconnectEvent;
 import de.razey.mc.core.events.CorePlayerEnterEvents;
 import de.razey.mc.core.sql.CoreSql;
@@ -19,6 +20,8 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
 
         api = new CoreApi(this);
+
+        this.getServer().getPluginCommand("core").setExecutor(new CoreCommandExecutor());
 
         this.getServer().getPluginManager().registerEvents(new CorePlayerEnterEvents(), this);
         this.getServer().getPluginManager().registerEvents(new CorePlayerDisconnectEvent(), this);

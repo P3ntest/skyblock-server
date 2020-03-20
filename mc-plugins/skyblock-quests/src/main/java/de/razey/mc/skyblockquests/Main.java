@@ -5,6 +5,7 @@ import de.razey.mc.skyblockquests.events.EntityDamageEventsListener;
 import de.razey.mc.skyblockquests.events.PlayerInteractEventListener;
 import de.razey.mc.skyblockquests.npc.Farmer;
 import de.razey.mc.skyblockquests.npc.NPC;
+import de.razey.mc.skyblockquests.npc.OldMan01;
 import de.razey.mc.skyblockquests.npc.VanillaEntityNPC;
 import de.razey.mc.skyblockquests.world.FirstQuestWorld;
 import de.razey.mc.skyblockquests.world.QuestWorld;
@@ -37,6 +38,7 @@ public class Main extends JavaPlugin {
         QuestWorld.all.add(new FirstQuestWorld());
 
         NPC.all.add(new Farmer());
+        NPC.all.add(new OldMan01());
 
         for (QuestWorld questWorld : QuestWorld.all) {
             questWorld.loadWorld();

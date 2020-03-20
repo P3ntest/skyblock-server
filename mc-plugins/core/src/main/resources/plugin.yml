@@ -7,3 +7,5 @@ authors:
 main: de.razey.mc.core.Main
 version: 1.0
 commands:
+  core:
+    permission: core.command

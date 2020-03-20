@@ -9,6 +9,13 @@ depend: [ServerCore]
 main: de.razey.mc.admincommands.Main
 commands:
   invsee:
+  heal:
+  feed:
+  tphere:
+  repair:
+  repairall:
+  sudo:
+  opsudo:
   c:
     aliases:
       - 1

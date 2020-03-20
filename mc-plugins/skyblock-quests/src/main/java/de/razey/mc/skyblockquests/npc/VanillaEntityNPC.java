@@ -58,8 +58,8 @@ public interface VanillaEntityNPC extends NPC {
 
         ((LivingEntity) spawned).setAI(false);
 
-        postSpawnAction(spawned);
-
         setSpawned(spawned);
+
+        postSpawnAction(spawned);
     }
 }

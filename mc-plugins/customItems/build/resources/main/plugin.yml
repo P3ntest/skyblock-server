@@ -2,6 +2,8 @@ name: CustomItems
 version: 1.0
 main: de.razey.customitems.Main
 author: P3ntest
+api-version: 1.13
 depend: [ServerCore]
 commands:
+  customitem:
   customitem:
