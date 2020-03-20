@@ -1,6 +1,8 @@
 name: SkyblockScoreboard
 version: 1.0
 author: P3ntest
+depend: [ServerCore]
+api-version: 1.13
 authors:
   - P3ntest
   - Razey

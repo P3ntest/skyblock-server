@@ -7,6 +7,7 @@ authors:
 version: 1.0
 depend: [ServerCore]
 main: de.razey.mc.admincommands.Main
+api-version: 1.13
 commands:
   invsee:
   heal:

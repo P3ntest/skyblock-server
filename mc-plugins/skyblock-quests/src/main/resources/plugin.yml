@@ -3,6 +3,7 @@ author: P3ntest
 version: 1.0
 depend: [ServerCore]
 main: de.razey.mc.skyblockquests.Main
+api-version: 1.13
 commands:
   questworld:
 

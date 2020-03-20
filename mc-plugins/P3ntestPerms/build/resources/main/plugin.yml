@@ -4,6 +4,8 @@ author: P3ntest
 authors:
   - P3ntest
 main: me.p3ntest.permissions.Main
+api-version: 1.13
+depend: [ServerCore]
 commands:
   permissions:
     aliases:
